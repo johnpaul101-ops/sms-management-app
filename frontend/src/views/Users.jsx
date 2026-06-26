@@ -40,7 +40,7 @@ const Users = () => {
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("accessToken");
-
+    setIsLoading(true);
     try {
       const response = await fetch(`${baseUrl}/users/${id}`, {
         method: "DELETE",
@@ -58,9 +58,11 @@ const Users = () => {
       const data = await response.json();
       setUsers((prev) => prev.filter((user) => user._id !== id));
 
+      setIsLoading(false);
       return data;
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -72,6 +74,50 @@ const Users = () => {
       success: {
         render({ data }) {
           return data?.message || "Successfully Deleted User";
+        },
+      },
+      error: {
+        render({ data }) {
+          return data?.message || "Something went wrong!";
+        },
+      },
+    });
+  };
+
+  const makeUserAdmin = async (id) => {
+    const token = localStorage.getItem("accessToken");
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseUrl}/users/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        throw new Error(`${response.status}: ${errorMessage.message}`);
+      }
+
+      alert("Are you sure you want to make this user admin?");
+      const data = await response.json();
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleMakeUserAdmin = async (id) => {
+    const makeUserAdminPromise = makeUserAdmin(id);
+
+    toast.promise(makeUserAdminPromise, {
+      pending: "Loading...",
+      success: {
+        render({ data }) {
+          return data?.message || "Successfully Make User Admin";
         },
       },
       error: {
@@ -123,12 +169,17 @@ const Users = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3 justify-center">
-                <button className="bg-primary hover:bg-violet-500 transition active:scale-95 shadow-sm hover:shadow px-2 py-1 text-white rounded-md cursor-pointer">
+                <button
+                  className="bg-primary hover:bg-violet-500 transition active:scale-95 shadow-sm hover:shadow px-2 py-1 text-white rounded-md cursor-pointer"
+                  onClick={() => handleMakeUserAdmin(user._id)}
+                  disabled={isLoading}
+                >
                   Make Admin
                 </button>
                 <button
                   className="bg-primary hover:bg-violet-500 transition active:scale-95 shadow-sm hover:shadow px-2 py-1 text-white rounded-md cursor-pointer"
                   onClick={() => handleDeleteUser(user._id)}
+                  disabled={isLoading}
                 >
                   Delete
                 </button>
