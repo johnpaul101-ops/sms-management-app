@@ -14,18 +14,18 @@ import transactionsRouter from "./routes/transactions.route.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import User from "./models/user.model.js";
-import { ReturnDocument } from "mongodb";
 
 dotenv.config();
 
 const app = express();
 const server = createServer(app);
-const PORT = process.env.PORT_NUM;
+const PORT = process.env.PORT_NUM || 5000;
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://sms-management-app-mbqc.vercel.app",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
