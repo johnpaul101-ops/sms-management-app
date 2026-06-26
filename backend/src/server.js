@@ -23,7 +23,10 @@ const PORT = process.env.PORT_NUM || 5000;
 
 const io = new Server(server, {
   cors: {
-    origin: "https://sms-management-app-mbqc.vercel.app",
+    origin: [
+      "https://sms-management-app.vercel.app",
+      "https://sms-management-app-mbqc.vercel.app",
+    ],
     methods: ["GET", "POST"],
   },
 });
@@ -32,7 +35,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://sms-management-app-mbqc.vercel.app",
+    origin: [
+      "https://sms-management-app.vercel.app",
+      "https://sms-management-app-mbqc.vercel.app",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
