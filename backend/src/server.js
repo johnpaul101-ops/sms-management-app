@@ -25,11 +25,8 @@ app.set("trust proxy", 1);
 
 const io = new Server(server, {
   cors: {
-    origin: [
-      "https://sms-management-app.vercel.app",
-      "https://sms-management-app-mbqc.vercel.app",
-    ],
-    methods: ["GET", "POST"],
+    origin: "https://sms-management-app-mbqc.vercel.app",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   },
 });
 
@@ -37,10 +34,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://sms-management-app.vercel.app",
-      "https://sms-management-app-mbqc.vercel.app",
-    ],
+    origin: "https://sms-management-app-mbqc.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
