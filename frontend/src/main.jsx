@@ -19,12 +19,11 @@ window.fetch = async (url, options = {}) => {
   }
 
   const method = (options.method || "GET").toLowerCase();
-
   const config = {
     method: method,
     url:
       typeof url === "string"
-        ? url.replace("http://localhost:5000/api/v1", "")
+        ? url.replace("https://sms-management-app.onrender.com/api/v1", "")
         : url,
     headers: options.headers || {},
   };
@@ -39,7 +38,6 @@ window.fetch = async (url, options = {}) => {
 
   try {
     const response = await apiClient(config);
-
     return {
       ok: true,
       status: response.status,
@@ -47,10 +45,13 @@ window.fetch = async (url, options = {}) => {
       text: async () => JSON.stringify(response.data),
     };
   } catch (error) {
+    const status = error.response?.status || 500;
+    const data = error.response?.data;
     return {
       ok: false,
-      status: error.response?.status || 500,
-      json: async () => error.response?.data,
+      status: status,
+      json: async () =>
+        typeof data === "string" ? { message: data, error: true } : data,
     };
   }
 };
