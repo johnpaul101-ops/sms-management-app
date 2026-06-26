@@ -4,7 +4,7 @@ import { useState } from "react";
 import RequestContext from "../contexts/RequestContext";
 import { toast } from "react-toastify";
 import { MdArrowDropDown } from "react-icons/md";
-import DurationInput from "../components/durationInput.jsx";
+import DurationInput from "../components/DurationInput.jsx";
 import HeroSmsTransactionTable from "../components/HeroSmsTransactionTable.jsx";
 
 const HeroSMSActivation = () => {
