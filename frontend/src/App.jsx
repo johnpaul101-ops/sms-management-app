@@ -42,7 +42,7 @@ const App = () => {
   useEffect(() => {
     if (!user) return;
 
-    const socket = io("http://localhost:5000", {
+    const socket = io("https://sms-management-app.onrender.com", {
       query: { userId: user.data.user._id },
     });
 
