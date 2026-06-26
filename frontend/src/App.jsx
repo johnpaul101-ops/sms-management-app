@@ -13,7 +13,6 @@ import Herosms from "./pages/Herosms.jsx";
 import FiveSim from "./pages/FiveSim.jsx";
 import GrizzlySms from "./pages/GrizzlySms.jsx";
 import AnosimActivation from "./views/AnosimActivation.jsx";
-
 import { Navigate } from "react-router-dom";
 import HeroSMSActivation from "./views/HeroSMSActivation.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
@@ -28,7 +27,10 @@ const App = () => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
-
+  const socketURL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://sms-management-app.onrender.com";
   useEffect(() => {
     const handleGlobalLogout = () => {
       setUser(null);
@@ -42,7 +44,7 @@ const App = () => {
   useEffect(() => {
     if (!user) return;
 
-    const socket = io("https://sms-management-app.onrender.com", {
+    const socket = io(socketURL, {
       query: { userId: user.data.user._id },
     });
 

@@ -5,9 +5,16 @@ import { RequestContextProvider } from "./contexts/RequestContext.jsx";
 import { UIContextProvider } from "./contexts/UIContext.jsx";
 import { apiClient } from "./api/apiClient.js";
 import { ToastContainer } from "react-toastify";
+
+const PROD_URL = "https://sms-management-app.onrender.com/api/v1";
+
 window._originalFetch = window.fetch;
 window.fetch = async (url, options = {}) => {
-  if (typeof url === "string" && !url.includes("onrender.com")) {
+  if (
+    typeof url === "string" &&
+    !url.includes("onrender.com") &&
+    !url.includes("localhost")
+  ) {
     return window._originalFetch(url, options);
   }
 
@@ -16,7 +23,9 @@ window.fetch = async (url, options = {}) => {
       method: options.method || "GET",
       url:
         typeof url === "string"
-          ? url.replace("https://sms-management-app.onrender.com/api/v1", "")
+          ? url
+              .replace(PROD_URL, "")
+              .replace("http://localhost:5000/api/v1", "")
           : url,
       data: options.body ? JSON.parse(options.body) : null,
       headers: options.headers,
@@ -27,15 +36,13 @@ window.fetch = async (url, options = {}) => {
       json: async () => response.data,
     };
   } catch (error) {
-    const status = error.response?.status || 500;
     const data = error.response?.data;
     return {
       ok: false,
-      status: status,
-
+      status: error.response?.status || 500,
       json: async () =>
         typeof data === "string"
-          ? { message: data, error: true }
+          ? { message: data }
           : data || { message: "Error" },
     };
   }

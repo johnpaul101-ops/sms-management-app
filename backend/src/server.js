@@ -21,11 +21,21 @@ const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT_NUM || 5000;
 
+const allowedOrigins = [
+  "https://sms-management-app-mbqc.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
 app.set("trust proxy", 1);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://sms-management-app-mbqc.vercel.app",
+    origin: [
+      "https://sms-management-app-mbqc.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:3000",
+    ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   },
 });
@@ -34,7 +44,15 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://sms-management-app-mbqc.vercel.app",
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
