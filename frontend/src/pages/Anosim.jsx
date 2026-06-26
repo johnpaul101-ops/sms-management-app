@@ -25,7 +25,7 @@ const Anosim = () => {
         if (!response.ok)
           throw new Error("Failed fetching balance from anosim", data.message);
 
-        setBalance(data.balance.toFixed(2));
+        setBalance((data?.balance ?? 0).toFixed(2));
         setIsLoading(false);
       } catch (error) {
         console.error(error);
