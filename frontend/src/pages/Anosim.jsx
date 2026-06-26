@@ -1,0 +1,60 @@
+import { useContext, useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+import { Outlet } from "react-router-dom";
+import RequestContext from "../contexts/RequestContext";
+
+const Anosim = () => {
+  const { baseUrl } = useContext(RequestContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const links = [
+    {
+      name: "Activation",
+      path: "activation",
+    },
+  ];
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${baseUrl}/anosim/checkbalance`);
+        const data = await response.json();
+
+        if (!response.ok)
+          throw new Error("Failed fetching balance from anosim", data.message);
+
+        setBalance(data.balance.toFixed(2));
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    };
+
+    window.addEventListener("anosimRefetchBalance", fetchBalance);
+
+    fetchBalance();
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-5 bg-main-bg min-h-screen p-5">
+      <Navbar
+        hasBalance={true}
+        balance={balance}
+        hasSidebar={true}
+        isLoading={isLoading}
+      />
+      <div className="flex gap-5 relative">
+        <Sidebar links={links} mainPath={"/anosim"} />
+
+        <main className="w-full bg-surface rounded-2xl p-5 border border-border-color">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default Anosim;
