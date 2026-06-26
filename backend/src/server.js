@@ -25,7 +25,6 @@ const io = new Server(server, {
   cors: {
     origin: "https://sms-management-app-mbqc.vercel.app",
     methods: ["GET", "POST"],
-    credentials: true,
   },
 });
 
@@ -33,7 +32,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://sms-management-app-mbqc.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
