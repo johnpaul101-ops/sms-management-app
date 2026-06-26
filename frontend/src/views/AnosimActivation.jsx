@@ -191,12 +191,19 @@ const AnosimActivation = () => {
   }, []);
 
   useEffect(() => {
-    if (!transaction) return;
+    if (!transaction || transaction.length === 0) return;
 
     const fetchInterval = setInterval(async () => {
       const indexToFetch = currentIndex.current % transaction.length;
 
-      const currentId = transaction[indexToFetch];
+      const currentItem = transaction[indexToFetch];
+
+      const currentId = currentItem?._id || currentItem;
+
+      if (!currentId || currentId === "undefined") {
+        currentIndex.current += 1;
+        return;
+      }
 
       try {
         const response = await fetch(`${baseUrl}/anosim/get-sms/${currentId}`);
