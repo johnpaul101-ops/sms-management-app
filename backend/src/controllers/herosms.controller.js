@@ -140,7 +140,7 @@ export const heroSmsActivateSMS = async (req, res) => {
       });
     } else {
       const response = await fetch(
-        `https://hero-sms.com/stubs/handler_api.php?action=getNumberV2&service=${serviceCode}&country=${countryId}&maxPrice=${maxPrice}&api_key=${API_KEY}`,
+        `https://hero-sms.com/stubs/handler_api.php?action=getNumberV2&service=${serviceCode}&country=${countryId}&operator=any&maxPrice=${maxPrice}&fixedPrice=true&api_key=${API_KEY}`,
       );
 
       const data = await response.text();
@@ -153,8 +153,10 @@ export const heroSmsActivateSMS = async (req, res) => {
       }
 
       let parsedData;
+
       try {
         parsedData = JSON.parse(data);
+        console.log(parsedData);
       } catch (parseError) {
         console.error("Failed to parse JSON response:", data);
         return res.status(500).json({
@@ -180,6 +182,7 @@ export const heroSmsActivateSMS = async (req, res) => {
           message: "User not found",
         });
       }
+
       const saveTransaction = await Transaction.create({
         activationId: parsedData.activationId,
         userId,
@@ -194,6 +197,8 @@ export const heroSmsActivateSMS = async (req, res) => {
         status: "pending",
       });
 
+      console.log(maxPrice);
+      console.log(saveTransaction);
       res.status(200).json({
         success: true,
         message: "Successfully Activate SMS",

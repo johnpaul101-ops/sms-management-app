@@ -206,7 +206,7 @@ const HeroSMSActivation = () => {
         const data = await response.json();
         if (!response.ok)
           throw new Error(`${response.status}: ${data.message}`);
-        console.log(data);
+
         setRentalPrices(data?.[Number(countryId)] || {});
       } catch (error) {
         console.error(error);
