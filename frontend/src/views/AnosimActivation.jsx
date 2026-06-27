@@ -135,10 +135,6 @@ const AnosimActivation = () => {
         reject(error);
       } finally {
         setIsLoading(false);
-        setCountryId("");
-        setServiceId("");
-        setProvId("");
-        setPrice(0);
       }
     });
 

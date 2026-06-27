@@ -282,7 +282,7 @@ export const heroSmsWebhook = async (req, res) => {
   res.status(200).send("OK");
 
   try {
-    const updatedTransaction = await Transaction.findOneAndUpdate(
+    await Transaction.findOneAndUpdate(
       {
         $or: [
           { activationId: String(activationId) },
@@ -297,14 +297,6 @@ export const heroSmsWebhook = async (req, res) => {
       },
       { returnDocument: "after" },
     );
-
-    if (!updatedTransaction) {
-      console.log(
-        `No Transaction found for activationId: ${activationId} code: ${code}`,
-      );
-    } else {
-      console.log(`✅ Successfully updated ID: ${activationId} code: ${code}`);
-    }
   } catch (error) {
     console.error(error);
   }

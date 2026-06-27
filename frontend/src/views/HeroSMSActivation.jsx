@@ -138,12 +138,6 @@ const HeroSMSActivation = () => {
       })
       .finally(() => {
         setIsLoading(false);
-        setCountryId("");
-        setServiceCode("");
-        setMaxPrice(0);
-        setRentalPrices({});
-        setDuration(null);
-        setAmount(1);
       });
 
     toast.promise(bulkPromise, {
@@ -212,7 +206,7 @@ const HeroSMSActivation = () => {
         const data = await response.json();
         if (!response.ok)
           throw new Error(`${response.status}: ${data.message}`);
-
+        console.log(data);
         setRentalPrices(data?.[Number(countryId)] || {});
       } catch (error) {
         console.error(error);
@@ -299,8 +293,12 @@ const HeroSMSActivation = () => {
                           type="radio"
                           className="size-6 accent-purple cursor-pointer"
                           value={priceKey}
-                          checked={maxPrice == priceKey}
-                          onChange={(e) => setMaxPrice(e.target.value)}
+                          checked={maxPrice == priceKey && rentalPrice == 0}
+                          onChange={(e) => {
+                            setMaxPrice(e.target.value);
+                            setRentalPrice(0);
+                            setDuration(null);
+                          }}
                         />
                         <span>${priceKey}</span>
                       </div>
@@ -330,7 +328,7 @@ const HeroSMSActivation = () => {
             <div
               className={`bg-surface-2 flex flex-col gap-2 p-2 rounded-md ${isDown ? "translate-y-0" : "-translate-y-80 opacity-0"}`}
             >
-              {rentalPrices.length > 0 ? (
+              {rentalPrices ? (
                 <>
                   {Object.entries(rentalPrices).map(([time, value]) => {
                     let durationFormat = `${time} Hours`;
@@ -347,10 +345,11 @@ const HeroSMSActivation = () => {
                         setValue={(e) => {
                           setDuration(e.target.value);
                           setRentalPrice(value.price);
+                          setMaxPrice(0);
                         }}
                         price={value.price}
                         count={value.count}
-                        isChecked={time == duration}
+                        isChecked={time == duration && maxPrice === 0}
                       />
                     );
                   })}

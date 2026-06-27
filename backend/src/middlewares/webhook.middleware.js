@@ -7,8 +7,6 @@ export const verifyProviderIP = (req, res, next) => {
     ? incomingIP.split(",")[0].replace("::ffff:", "").trim()
     : "";
 
-  console.log(`Incoming webhook request from IP: ${cleanIP}`);
-
   if (!WHITELISTED_IPS.includes(cleanIP)) {
     console.warn(
       `Security Alert: Blocked unauthorized request from IP: ${cleanIP}`,
