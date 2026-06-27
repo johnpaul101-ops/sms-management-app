@@ -156,7 +156,6 @@ export const heroSmsActivateSMS = async (req, res) => {
 
       try {
         parsedData = JSON.parse(data);
-        console.log(parsedData);
       } catch (parseError) {
         console.error("Failed to parse JSON response:", data);
         return res.status(500).json({
@@ -197,8 +196,6 @@ export const heroSmsActivateSMS = async (req, res) => {
         status: "pending",
       });
 
-      console.log(maxPrice);
-      console.log(saveTransaction);
       res.status(200).json({
         success: true,
         message: "Successfully Activate SMS",
