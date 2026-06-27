@@ -22,7 +22,7 @@ const server = createServer(app);
 const PORT = process.env.PORT_NUM || 5000;
 
 const allowedOrigins = [
-  "https://sms-management-app-mbqc.vercel.app",
+  "https://sms-management-app.vercel.app",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
@@ -32,7 +32,7 @@ app.set("trust proxy", 1);
 const io = new Server(server, {
   cors: {
     origin: [
-      "https://sms-management-app-mbqc.vercel.app",
+      "https://sms-management-app.vercel.app",
       "http://localhost:5173",
       "http://localhost:3000",
     ],
