@@ -20,6 +20,7 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT_NUM || 5000;
+const onlineUsers = new Map();
 
 const allowedOrigins = [
   "https://sms-management-app.vercel.app",
@@ -76,6 +77,11 @@ io.on("connection", async (socket) => {
   }
 
   try {
+    if (onlineUsers.has(userId)) {
+      clearTimeout(onlineUsers.get(userId));
+      onlineUsers.delete(userId);
+    }
+
     await User.findByIdAndUpdate(userId, { isOnline: true });
 
     io.emit("user_status_changed", { userId, isOnline: true });
@@ -83,13 +89,17 @@ io.on("connection", async (socket) => {
     console.error(error);
   }
 
-  socket.on("disconnect", async () => {
-    try {
-      await User.findByIdAndUpdate(userId, { isOnline: false });
-      io.emit("user_status_changed", { userId, isOnline: false });
-    } catch (error) {
-      console.error(error);
-    }
+  socket.on("disconnect", () => {
+    const timeout = setTimeout(async () => {
+      try {
+        await User.findByIdAndUpdate(userId, { isOnline: false });
+        io.emit("user_status_changed", { userId, isOnline: false });
+      } catch (error) {
+        console.error(error);
+      }
+    }, 3000);
+
+    onlineUsers.set(userId, timeout);
   });
 });
 
