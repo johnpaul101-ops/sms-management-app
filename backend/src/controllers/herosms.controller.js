@@ -278,10 +278,8 @@ export const heroSmsWebhook = async (req, res) => {
   const { activationId, code, receivedAt } = req.body;
 
   if (!activationId) {
-    res.status(400).send("Invalid Payload");
+    return res.status(400).send("Invalid Payload");
   }
-
-  res.status(200).send("OK");
 
   try {
     await Transaction.findOneAndUpdate(
@@ -297,10 +295,13 @@ export const heroSmsWebhook = async (req, res) => {
         },
         $addToSet: { smsCode: code },
       },
-      { returnDocument: "after" },
+      { new: true },
     );
+
+    return res.status(200).send("OK");
   } catch (error) {
     console.error(error);
+    return res.status(500).send("Error");
   }
 };
 

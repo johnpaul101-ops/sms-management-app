@@ -222,15 +222,19 @@ const AnosimActivation = () => {
   return (
     <div className="flex flex-col gap-5 h-full items-center">
       <div className="flex flex-col items-center gap-2">
-        <h1 className="text-5xl text-header-text font-heading text-center mt-5">
+        <h1 className="text-5xl text-header-text dark:text-dark-text-main font-heading text-center mt-5">
           Anosim
         </h1>
-        <h1 className="text-3xl text-header-text font-heading">Activation</h1>
+        <h1 className="text-3xl text-header-text dark:text-dark-text-main font-heading">
+          Activation
+        </h1>
       </div>
 
       <div className="flex gap-4 flex-wrap">
         <div className="w-64 flex flex-col gap-2">
-          <h1 className="text-header-text text-xl text-center">Country</h1>
+          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
+            Country
+          </h1>
           <input
             type="text"
             className="bg-surface-2 w-full px-2 py-3 rounded-md focus:outline-none"
@@ -255,7 +259,9 @@ const AnosimActivation = () => {
         </div>
 
         <div className="w-64 flex flex-col gap-2">
-          <h1 className="text-header-text text-xl text-center">Service</h1>
+          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
+            Service
+          </h1>
           <input
             type="text"
             className="bg-surface-2 w-full px-2 py-3 rounded-md focus:outline-none"
@@ -286,7 +292,9 @@ const AnosimActivation = () => {
         </div>
 
         <div className="flex flex-col gap-2 w-56">
-          <h1 className="text-header-text text-xl text-center">Price</h1>
+          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
+            Price
+          </h1>
 
           {isLoading ? (
             <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
@@ -313,7 +321,9 @@ const AnosimActivation = () => {
         </div>
 
         <div className="flex flex-col gap-2 w-72">
-          <h1 className="text-header-text text-xl text-center">Provider</h1>
+          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
+            Provider
+          </h1>
 
           {isLoading ? (
             <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
@@ -363,7 +373,9 @@ const AnosimActivation = () => {
         </div>
 
         <div className="flex flex-col gap-2 w-32">
-          <h1 className="text-header-text text-xl text-center">Amount</h1>
+          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
+            Amount
+          </h1>
 
           <div className="flex flex-col gap-4">
             <div className=" flex justify-between bg-surface-2 rounded-md">

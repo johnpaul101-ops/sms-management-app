@@ -5,8 +5,11 @@ import { RxCross2 } from "react-icons/rx";
 import UIContext from "../contexts/UIContext";
 import { jwtDecode } from "jwt-decode";
 import { SyncLoader } from "react-spinners";
-
+import DarkToggle from "./DarkToggle";
+import { useDarkMode } from "../hooks/DarkMode.jsx";
 const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
+  const { darkMode, setDarkMode } = useDarkMode();
+
   const navLinks = [
     {
       name: "Home",
@@ -34,17 +37,17 @@ const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
   const user = jwtDecode(token);
 
   return (
-    <header className="bg-surface px-10 py-5 rounded-2xl flex items-center justify-between border border-border-color">
+    <header className="bg-surface dark:bg-dark-bg-card px-10 py-5 rounded-2xl flex items-center justify-between border border-border-color dark:border-dark-border">
       <nav className="flex items-center gap-5">
         {hasSidebar ? (
           <>
             {openSidebar ? (
               <button onClick={() => setOpenSidebar(false)}>
-                <RxCross2 className="text-header-text text-4xl block xl:hidden cursor-pointer" />
+                <RxCross2 className="text-header-text dark:text-dark-text-main text-4xl block xl:hidden cursor-pointer" />
               </button>
             ) : (
               <button onClick={() => setOpenSidebar(true)}>
-                <IoIosMenu className="text-header-text text-4xl block xl:hidden cursor-pointer" />
+                <IoIosMenu className="text-header-text dark:text-dark-text-main text-4xl block xl:hidden cursor-pointer" />
               </button>
             )}
           </>
@@ -55,14 +58,14 @@ const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
           {navLinks.map(({ name, path }) => (
             <li
               key={name}
-              className={`text-xl font-body text-secondary-text hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
+              className={`text-xl font-body text-secondary-text dark:text-dark-text-main hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
             >
               <Link to={path}>{name}</Link>
             </li>
           ))}
           {user.isAdmin ? (
             <li
-              className={`text-xl font-body text-secondary-text hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
+              className={`text-xl font-body text-secondary-text dark:text-dark-text-main hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
             >
               <Link to="/admin">Admin</Link>
             </li>
@@ -72,21 +75,24 @@ const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
         </ul>
       </nav>
 
-      {hasBalance ? (
-        <>
-          {isLoading ? (
-            <span className="bg-primary py-2 px-4 rounded-md text-white">
-              <SyncLoader color="#ffffff" size={10} />
-            </span>
-          ) : (
-            <span className="bg-primary py-2 px-4 rounded-md text-white">
-              ${balance}
-            </span>
-          )}
-        </>
-      ) : (
-        ""
-      )}
+      <div className="flex items-center gap-5">
+        <DarkToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+        {hasBalance ? (
+          <>
+            {isLoading ? (
+              <span className="bg-primary py-2 px-4 rounded-md text-white">
+                <SyncLoader color="#ffffff" size={10} />
+              </span>
+            ) : (
+              <span className="bg-primary py-2 px-4 rounded-md text-white">
+                ${balance}
+              </span>
+            )}
+          </>
+        ) : (
+          ""
+        )}
+      </div>
     </header>
   );
 };

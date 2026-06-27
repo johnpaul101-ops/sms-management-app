@@ -38,7 +38,7 @@ const TransactionHistory = () => {
   }, []);
   return (
     <div className="flex flex-col gap-5 p-5 overflow-y-auto items-center">
-      <h1 className="text-5xl text-header-text font-heading">
+      <h1 className="text-5xl text-header-text dark:text-dark-text-main font-heading">
         Activation History
       </h1>
 

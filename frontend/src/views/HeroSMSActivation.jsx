@@ -219,8 +219,12 @@ const HeroSMSActivation = () => {
   return (
     <div className="p-5 flex flex-col gap-6 items-center justify-center w-full">
       <div className="flex flex-col items-center gap-4">
-        <h1 className="text-5xl text-header-text font-heading">HeroSMS</h1>
-        <h1 className="text-3xl text-header-text font-heading">Activation</h1>
+        <h1 className="text-5xl text-header-text dark:text-dark-text-main font-heading">
+          HeroSMS
+        </h1>
+        <h1 className="text-3xl text-header-text dark:text-dark-text-main font-heading">
+          Activation
+        </h1>
       </div>
 
       <div className="flex justify-between gap-4 items-start">

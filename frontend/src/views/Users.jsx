@@ -130,7 +130,9 @@ const Users = () => {
 
   return (
     <div className="p-5 flex flex-col gap-5 items-center">
-      <h1 className="text-5xl text-header-text font-heading">Users</h1>
+      <h1 className="text-5xl text-header-text dark:text-dark-text-main font-heading">
+        Users
+      </h1>
 
       <div className="w-full max-w-7xl">
         <div className="grid grid-cols-[2fr_2fr_3fr_2fr_2fr] bg-purple-200 px-4 py-2 rounded-t-md">

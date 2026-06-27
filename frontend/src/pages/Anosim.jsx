@@ -39,7 +39,7 @@ const Anosim = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-5 bg-main-bg min-h-screen p-5">
+    <div className="flex flex-col gap-5 bg-main-bg dark:bg-dark-bg-main min-h-screen p-5">
       <Navbar
         hasBalance={true}
         balance={balance}
@@ -49,7 +49,7 @@ const Anosim = () => {
       <div className="flex gap-5 relative">
         <Sidebar links={links} mainPath={"/anosim"} />
 
-        <main className="w-full bg-surface rounded-2xl p-5 border border-border-color">
+        <main className="w-full bg-surface dark:bg-dark-bg-card rounded-2xl p-5 border border-border-color dark:border-dark-border">
           <Outlet />
         </main>
       </div>
