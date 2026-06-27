@@ -58,7 +58,7 @@ const transactionSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 259200,
+    expires: 172800,
   },
 });
 
