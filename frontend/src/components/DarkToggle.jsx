@@ -8,7 +8,9 @@ const DarkToggle = ({ darkMode, setDarkMode }) => {
         className={`bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ${
           darkMode ? "translate-x-6 bg-primary" : ""
         }`}
-      />
+      >
+        {darkMode ? "🌛" : "🌞"}
+      </div>
     </button>
   );
 };
