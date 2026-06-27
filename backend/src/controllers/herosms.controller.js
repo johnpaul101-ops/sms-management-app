@@ -295,7 +295,6 @@ export const heroSmsWebhook = async (req, res) => {
         },
         $addToSet: { smsCode: code },
       },
-      { new: true },
     );
 
     return res.status(200).send("OK");
