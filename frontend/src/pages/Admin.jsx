@@ -20,7 +20,7 @@ const Admin = () => {
       <div className="flex gap-5 relative">
         <Sidebar links={links} mainPath={"/admin"} />
 
-        <main className="w-full bg-surface dark:bg-dark-bg-card rounded-2xl p-5 border border-border-color dark:border-dark-border">
+        <main className="w-full min-h-[85vh] bg-surface dark:bg-dark-bg-card rounded-2xl p-5 border border-border-color dark:border-dark-border">
           <Outlet />
         </main>
       </div>

@@ -230,24 +230,21 @@ const AnosimActivation = () => {
         </h1>
       </div>
 
-      <div className="flex gap-4 flex-wrap">
-        <div className="w-64 flex flex-col gap-2">
-          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
-            Country
-          </h1>
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full sm:max-w-7xl lg:mx-auto">
+        <div className="flex flex-col">
           <input
             type="text"
-            className="bg-surface-2 w-full px-2 py-3 rounded-md focus:outline-none"
-            placeholder={"Search..."}
+            className="bg-surface-2 w-full px-2 py-3 rounded-t-md focus:outline-none"
+            placeholder={"Country"}
             value={country}
             onChange={(e) => setCountry(e.target.value)}
           />
 
-          <div className="bg-surface-2 p-3 rounded-md">
+          <div className="bg-surface-2 p-3 rounded-b-md">
             <ul className="flex flex-col gap-3">
               {filteredCountryList?.map(({ country, id }) => (
                 <li
-                  className={`flex flex-col gap-3 pl-3 py-3 border-b border-zinc-400 text-lg font-body cursor-pointer ${countryId == id ? "bg-zinc-400" : ""}`}
+                  className={`flex flex-col gap-3 pl-3 py-3 border-b border-zinc-400 text-sm xl:text-lg font-body cursor-pointer ${countryId == id ? "bg-zinc-400" : ""}`}
                   key={id}
                   onClick={() => setCountryId(id)}
                 >
@@ -258,24 +255,21 @@ const AnosimActivation = () => {
           </div>
         </div>
 
-        <div className="w-64 flex flex-col gap-2">
-          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
-            Service
-          </h1>
+        <div className="flex flex-col">
           <input
             type="text"
-            className="bg-surface-2 w-full px-2 py-3 rounded-md focus:outline-none"
-            placeholder={"Search..."}
+            className="bg-surface-2 w-full px-2 py-3 rounded-t-md focus:outline-none"
+            placeholder={"Service"}
             value={service}
             onChange={(e) => setService(e.target.value)}
           />
 
           {countryId ? (
-            <div className="bg-surface-2 p-3 rounded-md">
-              <ul className="flex flex-col gap-3">
+            <div className="bg-surface-2 p-3 rounded-b-md">
+              <ul className="flex flex-col">
                 {filteredServicesList?.map(({ service, id }) => (
                   <li
-                    className={`flex flex-col gap-3 pl-3 py-3 border-b border-zinc-400 text-lg font-body cursor-pointer ${serviceId == id ? "bg-zinc-400" : ""}`}
+                    className={`flex flex-col gap-3 pl-3 py-3 border-b border-zinc-400 text-sm xl:text-lg font-body cursor-pointer ${serviceId == id ? "bg-zinc-400" : ""}`}
                     key={id}
                     onClick={() => setServiceId(id)}
                   >
@@ -285,19 +279,17 @@ const AnosimActivation = () => {
               </ul>
             </div>
           ) : (
-            <div className="w-full p-3 bg-surface-2 rounded-md">
-              <span className="text-lg text-zinc-500">Select a Country</span>
+            <div className="w-full p-3 bg-surface-2 rounded-b-md">
+              <span className="text-sm xl:text-lg text-zinc-500">
+                Select a Country
+              </span>
             </div>
           )}
         </div>
 
-        <div className="flex flex-col gap-2 w-56">
-          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
-            Price
-          </h1>
-
+        <div className="flex flex-col">
           {isLoading ? (
-            <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
+            <div className="bg-surface-2 w-full px-2 py-3 rounded-t-md">
               <span className="text-zinc-500 text-center">Loading...</span>
             </div>
           ) : (
@@ -312,7 +304,7 @@ const AnosimActivation = () => {
               ) : (
                 <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
                   <span className="text-zinc-500 text-center">
-                    Select Service
+                    Select a Service to Show Price
                   </span>
                 </div>
               )}
@@ -320,11 +312,7 @@ const AnosimActivation = () => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 w-72">
-          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
-            Provider
-          </h1>
-
+        <div className="flex flex-col gap-2">
           {isLoading ? (
             <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
               <span className="text-zinc-500 text-center">Loading...</span>
@@ -342,8 +330,8 @@ const AnosimActivation = () => {
                             key={providerId}
                             onClick={() => setProvId(providerId)}
                           >
-                            <span className="text-lg">{name}</span>
-                            <span className="text-header-text bg-surface-2 px-2 py-1 rounded-md">
+                            <span className="text-sm xl:text-lg">{name}</span>
+                            <span className="text-header-text text-xs bg-surface-2 px-1 xl:px-2 py-1 rounded-md">
                               Available: {availableCount}
                             </span>
                           </div>
@@ -364,7 +352,7 @@ const AnosimActivation = () => {
               ) : (
                 <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
                   <span className="text-zinc-500 text-center">
-                    Select Service
+                    Select a Service to Show Provider
                   </span>
                 </div>
               )}
@@ -372,11 +360,7 @@ const AnosimActivation = () => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 w-32">
-          <h1 className="text-header-text dark:text-dark-text-main text-xl text-center">
-            Amount
-          </h1>
-
+        <div className="flex flex-col gap-2 w-32 lg:w-full justify-self-center">
           <div className="flex flex-col gap-4">
             <div className=" flex justify-between bg-surface-2 rounded-md">
               <button

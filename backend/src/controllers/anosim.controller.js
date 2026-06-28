@@ -184,7 +184,9 @@ export const anosimChangeSmsStatus = async (req, res) => {
       userId: objectId,
       provider: "Anosim",
       status: "pending",
-    }).lean();
+    })
+      .lean()
+      .sort({ createdAt: -1 });
 
     const updatedActiveList = activeList.map((tx) => {
       const now = Date.now();

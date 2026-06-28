@@ -43,29 +43,29 @@ const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
           <>
             {openSidebar ? (
               <button onClick={() => setOpenSidebar(false)}>
-                <RxCross2 className="text-header-text dark:text-dark-text-main text-4xl block xl:hidden cursor-pointer" />
+                <RxCross2 className="text-header-text dark:text-dark-text-main text-4xl block cursor-pointer" />
               </button>
             ) : (
               <button onClick={() => setOpenSidebar(true)}>
-                <IoIosMenu className="text-header-text dark:text-dark-text-main text-4xl block xl:hidden cursor-pointer" />
+                <IoIosMenu className="text-header-text dark:text-dark-text-main text-4xl block cursor-pointer" />
               </button>
             )}
           </>
         ) : (
           ""
         )}
-        <ul className="flex gap-4">
+        <ul className="flex gap-4 items-center">
           {navLinks.map(({ name, path }) => (
             <li
               key={name}
-              className={`text-xl font-body text-secondary-text dark:text-dark-text-main hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
+              className={`text-sm lg:text-lg xl:text-xl font-body text-secondary-text dark:text-dark-text-main hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
             >
               <Link to={path}>{name}</Link>
             </li>
           ))}
           {user.isAdmin ? (
             <li
-              className={`text-xl font-body text-secondary-text dark:text-dark-text-main hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
+              className={`text-sm lg:text-lg xl:text-xl font-body text-secondary-text dark:text-dark-text-main hover:text-[#8B5CF6] transition duration-200 ease-in-out`}
             >
               <Link to="/admin">Admin</Link>
             </li>

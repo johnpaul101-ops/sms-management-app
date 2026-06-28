@@ -333,7 +333,9 @@ export const heroSmsChangeSmsStatus = async (req, res) => {
       userId: objectId,
       provider: "HeroSMS",
       status: "pending",
-    }).lean();
+    })
+      .lean()
+      .sort({ createdAt: -1 });
 
     const updatedActiveList = activeList.map((tx) => {
       const now = Date.now();

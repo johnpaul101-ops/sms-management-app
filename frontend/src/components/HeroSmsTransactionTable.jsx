@@ -63,20 +63,20 @@ const HeroSmsTransactionTable = ({ transaction, activeTransaction }) => {
   };
   return (
     <div className="w-full max-w-7xl">
-      <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_4fr_2fr] bg-purple-200 px-5 py-2 rounded-t-md">
-        <span className="font-body">Service</span>
-        <span className="font-body">Country</span>
-        <span className="font-body">Number</span>
-        <span className="font-body">Cost</span>
-        <span className="font-body">Time</span>
-        <span className="font-body">Status</span>
-        <span className="font-body text-center">Action</span>
+      <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_3fr_2fr] bg-purple-200 px-5 py-2 rounded-t-md">
+        <span className="font-body text-xs md:text-sm">Service</span>
+        <span className="font-body text-xs md:text-sm">Country</span>
+        <span className="font-body text-xs md:text-sm">Number</span>
+        <span className="font-body text-xs md:text-sm">Cost</span>
+        <span className="font-body text-xs md:text-sm">Time</span>
+        <span className="font-body text-xs md:text-sm">Status</span>
+        <span className="font-body text-center text-xs md:text-sm">Action</span>
       </div>
 
       {transaction?.length > 0 ? (
         <>
           {transaction?.map((tx) => (
-            <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_4fr_2fr] bg-purple-100 px-5 py-2 items-center">
+            <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_3fr_2fr] bg-purple-100 px-5 py-2 items-center text-xs">
               <span className="font-body">{tx.service}</span>
               <span className="font-body">{tx.country}</span>
               <div className="flex gap-5 items-center">

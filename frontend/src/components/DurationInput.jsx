@@ -16,7 +16,7 @@ const DurationInput = ({
           onChange={setValue}
           checked={isChecked}
         />
-        <span className="text-lg font-body">{duration}</span>
+        <span className="text-sm lg:text-lg font-body">{duration}</span>
       </div>
 
       <div className="flex flex-col gap-1">

@@ -227,17 +227,17 @@ const HeroSMSActivation = () => {
         </h1>
       </div>
 
-      <div className="flex justify-between gap-4 items-start">
-        <div className="flex flex-col gap-2 ">
-          <span className="bg-surface-2 px-5 py-3 text-xl rounded-md font-body">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[2fr_2fr_2fr_2fr_1fr_1fr] w-full lg:max-w-[1400px] items-start gap-4">
+        <div className="flex flex-col">
+          <span className="bg-surface-2 px-5 py-3 text-sm md:text-lg lg:text-xl rounded-t-md font-body">
             Select a country
           </span>
 
-          <ul className="bg-surface-2 px-5 py-3 rounded-md">
+          <ul className="bg-surface-2 px-5 py-3 rounded-b-md">
             {countryList.map(({ id, eng }) => (
               <li
                 key={id}
-                className={`text-xl font-body cursor-pointer border-b border-zinc-400 rounded-md px-1 py-2 ${id == countryId ? "bg-zinc-400" : ""}`}
+                className={`text-sm md:text-lg lg:text-xl font-body cursor-pointer border-b border-zinc-400 rounded-md px-1 py-2 ${id == countryId ? "bg-zinc-400" : ""}`}
                 onClick={() => {
                   setCountryId(id);
                   setCountryName(eng);
@@ -249,17 +249,17 @@ const HeroSMSActivation = () => {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-2 ">
-          <span className="bg-surface-2 px-5 py-3 text-xl rounded-md font-body">
+        <div className="flex flex-col">
+          <span className="bg-surface-2 px-5 py-3 text-sm md:text-lg lg:text-xl rounded-t-md font-body">
             Select a service
           </span>
 
           {countryId ? (
-            <ul className="bg-surface-2 px-5 py-3 rounded-md flex flex-col gap-5">
+            <ul className="bg-surface-2 px-5 py-3 rounded-b-md flex flex-col gap-5">
               {serviceList.map(({ name, code }) => (
                 <li
                   key={code}
-                  className={`text-xl font-body cursor-pointer border-b border-zinc-400 rounded-md px-1 py-2 ${code == serviceCode ? "bg-zinc-400" : ""}`}
+                  className={`text-sm md:text-lg lg:text-xl font-body cursor-pointer border-b border-zinc-400 rounded-md px-1 py-2 ${code == serviceCode ? "bg-zinc-400" : ""}`}
                   onClick={() => {
                     setServiceCode(code);
                     setServiceName(name);
@@ -274,19 +274,19 @@ const HeroSMSActivation = () => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 w-72">
-          <h1 className="bg-surface-2 px-5 py-3 text-xl rounded-md font-body">
+        <div className="flex flex-col">
+          <h1 className="bg-surface-2 px-5 py-3 text-sm md:text-lg lg:text-xl rounded-t-md font-body">
             Prices
           </h1>
 
           {serviceCode ? (
             <>
               {isLoading ? (
-                <span className="bg-surface-2 px-5 py-3 text-xl rounded-md font-body">
+                <span className="bg-surface-2 px-5 py-3 text-sm md:text-lg lg:text-xl rounded-b-md font-body">
                   Loading...
                 </span>
               ) : (
-                <div className="bg-surface-2 px-5 py-3 rounded-md flex flex-col gap-5">
+                <div className="bg-surface-2 px-5 py-3 rounded-b-md flex flex-col gap-5">
                   {Object.entries(offers)?.map(([priceKey, pcsValue]) => (
                     <div
                       key={priceKey}
@@ -318,9 +318,11 @@ const HeroSMSActivation = () => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 w-96 overflow-hidden">
-          <div className="flex justify-between items-center bg-surface-2 px-5 py-3 text-xl rounded-md cursor-pointer">
-            <h1 className="font-body">Durations</h1>
+        <div className="flex flex-col w-full lg:w-72 overflow-hidden">
+          <div className="flex justify-between items-center bg-surface-2 px-5 py-3 text-xl rounded-t-md cursor-pointer">
+            <h1 className="font-body text-sm md:text-lg lg:text-xl">
+              Durations
+            </h1>
 
             <MdArrowDropDown
               className="text-black size-7"
@@ -330,7 +332,7 @@ const HeroSMSActivation = () => {
 
           {isDown ? (
             <div
-              className={`bg-surface-2 flex flex-col gap-2 p-2 rounded-md ${isDown ? "translate-y-0" : "-translate-y-80 opacity-0"}`}
+              className={`bg-surface-2 flex flex-col gap-2 p-2 rounded-b-md ${isDown ? "translate-y-0" : "-translate-y-80 opacity-0"}`}
             >
               {rentalPrices ? (
                 <>
