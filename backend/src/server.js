@@ -72,18 +72,15 @@ app.use("/api/v1/transactions", transactionsRouter);
 io.on("connection", async (socket) => {
   const userId = socket.handshake.query.userId;
 
-  if (!userId) {
-    return socket.disconnect(true);
+  if (!userId) return socket.disconnect(true);
+
+  if (onlineUsers.has(userId)) {
+    clearTimeout(onlineUsers.get(userId));
+    onlineUsers.delete(userId);
   }
 
   try {
-    if (onlineUsers.has(userId)) {
-      clearTimeout(onlineUsers.get(userId));
-      onlineUsers.delete(userId);
-    }
-
     await User.findByIdAndUpdate(userId, { isOnline: true });
-
     io.emit("user_status_changed", { userId, isOnline: true });
   } catch (error) {
     console.error(error);
@@ -94,6 +91,7 @@ io.on("connection", async (socket) => {
       try {
         await User.findByIdAndUpdate(userId, { isOnline: false });
         io.emit("user_status_changed", { userId, isOnline: false });
+        onlineUsers.delete(userId);
       } catch (error) {
         console.error(error);
       }
