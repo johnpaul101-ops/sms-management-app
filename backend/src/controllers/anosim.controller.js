@@ -82,6 +82,7 @@ export const anosimActivateSms = async (req, res) => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+      timeZone: "Asia/Manila",
     });
     const user = await User.findOne({ _id: userId });
     const booking = orderData.orderBookings?.[0] || {};

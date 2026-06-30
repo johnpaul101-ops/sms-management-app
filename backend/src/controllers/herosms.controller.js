@@ -184,6 +184,7 @@ export const heroSmsActivateSMS = async (req, res) => {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
+        timeZone: "Asia/Manila",
       });
       const user = await User.findOne({ _id: userId });
       if (!user) {
