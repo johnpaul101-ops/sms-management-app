@@ -111,6 +111,11 @@ export const heroSmsActivateSMS = async (req, res) => {
       const expirationTime = new Date(
         now.getTime() + duration * 60 * 60 * 1000,
       );
+      let timeStamp = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
       const user = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).json({
@@ -129,6 +134,7 @@ export const heroSmsActivateSMS = async (req, res) => {
         price: data.activationCost,
         startTime: now.toISOString(),
         endTime: expirationTime.toISOString(),
+        timeStamp: timeStamp,
         status: "pending",
       });
 
@@ -174,6 +180,11 @@ export const heroSmsActivateSMS = async (req, res) => {
 
       const now = new Date();
       const expirationTime = new Date(now.getTime() + 20 * 60 * 1000);
+      let timeStamp = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
       const user = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).json({
@@ -193,6 +204,7 @@ export const heroSmsActivateSMS = async (req, res) => {
         price: parsedData.activationCost,
         startTime: now.toISOString(),
         endTime: expirationTime.toISOString(),
+        timeStamp: timeStamp,
         status: "pending",
       });
 

@@ -8,12 +8,6 @@ const Anosim = () => {
   const { baseUrl } = useContext(RequestContext);
   const [isLoading, setIsLoading] = useState(false);
   const [balance, setBalance] = useState(0);
-  const links = [
-    {
-      name: "Activation",
-      path: "activation",
-    },
-  ];
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -43,12 +37,10 @@ const Anosim = () => {
       <Navbar
         hasBalance={true}
         balance={balance}
-        hasSidebar={true}
+        hasSidebar={false}
         isLoading={isLoading}
       />
       <div className="flex gap-5 relative">
-        <Sidebar links={links} mainPath={"/anosim"} />
-
         <main className="w-full min-h-[85vh] bg-surface dark:bg-dark-bg-card rounded-2xl p-2 lg:p-5 border border-border-color dark:border-dark-border">
           <Outlet />
         </main>

@@ -19,7 +19,7 @@ import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import Admin from "./pages/Admin.jsx";
 import Users from "./views/Users.jsx";
 import TransactionHistory from "./views/TransactionHistory.jsx";
-import io from "socket.io-client";
+import { connectSocket, disconnectSocket } from "./lib/socket.js";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -27,10 +27,7 @@ const App = () => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
-  const socketURL =
-    window.location.hostname === "localhost"
-      ? "http://localhost:5000"
-      : "https://sms-management-app.onrender.com";
+
   useEffect(() => {
     const handleGlobalLogout = () => {
       setUser(null);
@@ -42,13 +39,11 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) return;
-
-    const socket = io(socketURL, {
-      query: { userId: user.data.user._id },
-    });
-
-    return () => socket.disconnect();
+    if (user) {
+      connectSocket(user.data.user._id);
+    } else {
+      disconnectSocket();
+    }
   }, [user]);
   return (
     <Router>

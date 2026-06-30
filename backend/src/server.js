@@ -69,35 +69,37 @@ app.use("/api/v1/fivesim", fiveSimRouter);
 app.use("/api/v1/grizzlysms", grizlySmsRouter);
 app.use("/api/v1/transactions", transactionsRouter);
 
-io.on("connection", async (socket) => {
+io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
 
   if (!userId) return socket.disconnect(true);
 
-  if (onlineUsers.has(userId)) {
-    clearTimeout(onlineUsers.get(userId));
-    onlineUsers.delete(userId);
+  if (!onlineUsers.has(userId)) {
+    onlineUsers.set(userId, new Set());
   }
 
-  try {
-    await User.findByIdAndUpdate(userId, { isOnline: true });
-    io.emit("user_status_changed", { userId, isOnline: true });
-  } catch (error) {
-    console.error(error);
+  onlineUsers.get(userId).add(socket.id);
+
+  if (onlineUsers.get(userId).size === 1) {
+    User.findByIdAndUpdate(userId, { isOnline: true }).catch(console.error);
   }
 
-  socket.on("disconnect", () => {
-    const timeout = setTimeout(async () => {
+  socket.on("disconnect", async () => {
+    const userSockets = onlineUsers.get(userId);
+
+    if (!userSockets) return;
+
+    userSockets.delete(socket.id);
+
+    if (userSockets.size === 0) {
+      onlineUsers.delete(userId);
+
       try {
         await User.findByIdAndUpdate(userId, { isOnline: false });
-        io.emit("user_status_changed", { userId, isOnline: false });
-        onlineUsers.delete(userId);
       } catch (error) {
         console.error(error);
       }
-    }, 3000);
-
-    onlineUsers.set(userId, timeout);
+    }
   });
 });
 

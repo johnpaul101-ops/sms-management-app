@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import RequestContext from "../contexts/RequestContext";
 import { ClipLoader } from "react-spinners";
+import { GrFormPrevious } from "react-icons/gr";
+import { MdNavigateNext } from "react-icons/md";
 const TransactionHistory = () => {
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [page, setPage] = useState(1);
@@ -53,7 +55,7 @@ const TransactionHistory = () => {
       </h1>
 
       <div className="w-full max-w-8xl">
-        <div className="grid grid-cols-[1fr_2fr_1fr_1fr_2fr_1fr_2fr] bg-purple-200 px-4 py-2 rounded-t-md items-center text-sm">
+        <div className="grid grid-cols-[1fr_2fr_1fr_1fr_2fr_1fr_2fr_1fr] bg-purple-200 px-4 py-2 rounded-t-md items-center text-sm">
           <span className="font-body">Provider</span>
           <span className="font-body">User</span>
           <span className="font-body">Country</span>
@@ -61,6 +63,7 @@ const TransactionHistory = () => {
           <span className="font-body">Number</span>
           <span className="font-body">Cost</span>
           <span className="font-body">Status</span>
+          <span className="font-body">Time</span>
         </div>
 
         {isLoading ? (
@@ -78,10 +81,11 @@ const TransactionHistory = () => {
                 service,
                 phoneNumber,
                 price,
+                timeStamp,
                 status,
               }) => (
                 <div
-                  className="grid grid-cols-[1fr_2fr_1fr_1fr_2fr_1fr_2fr] px-4 py-2 items-center border-b border-zinc-400 text-sm"
+                  className="grid grid-cols-[1fr_2fr_1fr_1fr_2fr_1fr_2fr_1fr] px-4 py-2 items-center border-b border-zinc-400 text-sm"
                   key={_id}
                 >
                   <span className="font-body">{provider}</span>
@@ -99,6 +103,7 @@ const TransactionHistory = () => {
                     />
                     <span className="font-body capitalize">{status}</span>
                   </div>
+                  <span className="font-body">{timeStamp}</span>
                 </div>
               ),
             )}
@@ -106,15 +111,15 @@ const TransactionHistory = () => {
         )}
         <div className="flex gap-2 mt-4 justify-self-center">
           <button
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed"
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
             onClick={() => setPage((prev) => prev - 1)}
             disabled={page <= 1}
           >
-            Prev
+            <GrFormPrevious />
           </button>
           {totalPagesArray.map((num) => (
             <button
-              className={`px-4 py-2 bg-gray-200 text-header-text rounded hover:bg-primary hover:text-white ${page == num ? "bg-primary text-white disabled:cursor-not-allowed" : ""} font-body cursor-pointer`}
+              className={`px-3 py-1 bg-gray-200 text-header-text rounded hover:bg-primary hover:text-white ${page == num ? "bg-primary text-white disabled:cursor-not-allowed" : ""} font-body cursor-pointer text-xs`}
               onClick={() => setPage(num)}
               key={num}
               disabled={page == num}
@@ -124,11 +129,11 @@ const TransactionHistory = () => {
           ))}
 
           <button
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed"
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
             onClick={() => setPage((prev) => prev + 1)}
             disabled={page >= totalPages}
           >
-            Next
+            <MdNavigateNext />
           </button>
         </div>
       </div>

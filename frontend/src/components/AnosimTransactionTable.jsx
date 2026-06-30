@@ -54,25 +54,29 @@ const AnosimTransactionTable = ({ transaction, activeTransaction }) => {
 
   return (
     <div className="w-full max-w-6xl mt-5">
-      <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_4fr_2fr] bg-purple-200 px-5 py-2 rounded-t-md">
-        <span className="font-body">Service</span>
-        <span className="font-body">Country</span>
-        <span className="font-body">Number</span>
-        <span className="font-body">Cost</span>
-        <span className="font-body">Time</span>
-        <span className="font-body">Status</span>
-        <span className="font-body text-center">Action</span>
+      <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_2fr_1fr] bg-purple-200 px-5 py-2 rounded-t-md">
+        <span className="font-body text-xs md:text-sm">Service</span>
+        <span className="font-body text-xs md:text-sm">Country</span>
+        <span className="font-body text-xs md:text-sm">Number</span>
+        <span className="font-body text-xs md:text-sm">Cost</span>
+        <span className="font-body text-xs md:text-sm">Time</span>
+        <span className="font-body text-xs md:text-sm">Status</span>
+        <span className="font-body text-center text-xs md:text-sm">Action</span>
       </div>
 
       {transaction?.length > 0 ? (
         <>
           {transaction?.map((tx) => (
             <div className="flex flex-col bg-purple-100 px-5 py-4 border-b border-zinc-400 gap-3">
-              <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_4fr_2fr] items-center">
-                <span className="font-body">{tx.service}</span>
-                <span className="font-body">{tx.country}</span>
-                <div className="flex gap-5 items-center">
-                  <span className="bg-purple-50 px-2 py-1 font-body rounded-sm">
+              <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_2fr_1fr] items-center">
+                <span className="font-body text-xs md:text-sm">
+                  {tx.service}
+                </span>
+                <span className="font-body text-xs md:text-sm">
+                  {tx.country}
+                </span>
+                <div className="flex gap-2 lg:gap-5 items-center">
+                  <span className="bg-purple-50 px-2 py-1 font-body rounded-sm text-xs md:text-sm">
                     {tx.phoneNumber}
                   </span>
 
@@ -91,14 +95,16 @@ const AnosimTransactionTable = ({ transaction, activeTransaction }) => {
                     </button>
                   </div>
                 </div>
-                <span className="font-body">${tx.price}</span>
+                <span className="font-body text-xs md:text-sm">
+                  ${tx.price}
+                </span>
                 <CountdownDisplay
                   initialSeconds={tx.timeLeftInSeconds}
                   key={`${tx._id}`}
                 />
 
                 <span
-                  className={`px-2 py-1 border border-black rounded-md ${tx.smsCode.length > 0 ? "border-green-800" : ""} w-fit`}
+                  className={`px-2 py-1 border border-black rounded-md ${tx.smsCode.length > 0 ? "border-green-800" : ""} w-fit text-xs md:text-sm`}
                 >
                   {tx.smsCode.length > 0 ? "SMS Received" : "Waiting for SMS"}
                 </span>

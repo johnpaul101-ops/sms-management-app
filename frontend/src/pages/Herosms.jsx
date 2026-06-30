@@ -10,12 +10,6 @@ const Herosms = () => {
   const [balance, setBalance] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { baseUrl } = useContext(RequestContext);
-  const links = [
-    {
-      name: "Activation",
-      path: "activation",
-    },
-  ];
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -46,13 +40,11 @@ const Herosms = () => {
     <div className="flex flex-col gap-5 bg-main-bg dark:bg-dark-bg-main min-h-screen p-2 lg:p-5">
       <Navbar
         balance={balance}
-        hasSidebar={true}
+        hasSidebar={false}
         isLoading={isLoading}
         hasBalance={true}
       />
       <div className="flex gap-5 relative">
-        <Sidebar links={links} mainPath={"/herosms"} />
-
         <main className="w-full min-h-[85vh] bg-surface dark:bg-dark-bg-card rounded-2xl p-2 lg:p-5 border border-border-color dark:border-dark-border">
           <Outlet />
         </main>

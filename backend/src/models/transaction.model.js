@@ -42,6 +42,9 @@ const transactionSchema = new mongoose.Schema({
   endTime: {
     type: String,
   },
+  timeStamp: {
+    type: String,
+  },
   duration: {
     type: mongoose.Schema.Types.Mixed,
   },

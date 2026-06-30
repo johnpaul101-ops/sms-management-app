@@ -78,6 +78,11 @@ export const anosimActivateSms = async (req, res) => {
 
     const now = new Date();
     const expirationTime = new Date(now.getTime() + 20 * 60 * 1000);
+    let timeStamp = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
     const user = await User.findOne({ _id: userId });
     const booking = orderData.orderBookings?.[0] || {};
 
@@ -93,6 +98,7 @@ export const anosimActivateSms = async (req, res) => {
       rentalType: booking.rentalType,
       startTime: now.toISOString(),
       endTime: expirationTime.toISOString(),
+      timeStamp: timeStamp,
       duration: booking.durationInMinutes,
     });
 
