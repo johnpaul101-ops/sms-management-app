@@ -178,7 +178,7 @@ export const anosimChangeSmsStatus = async (req, res) => {
       const endTimeDate = new Date(tx.endTime);
 
       if (now > endTimeDate) {
-        if (tx.smsCode) {
+        if (tx.smsCode && tx.smsCode.length > 0) {
           tx.status = "success";
         } else {
           tx.status = "cancelled";
