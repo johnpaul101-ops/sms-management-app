@@ -46,7 +46,10 @@ const TransactionHistory = () => {
     fetchAllTransacHistory();
   }, [page]);
 
-  const totalPagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const pages = Array.from(
+    { length: Math.min(10, totalPages) },
+    (_, i) => i + 1,
+  );
 
   return (
     <div className="flex flex-col gap-5 p-5 overflow-y-auto items-center">
@@ -117,7 +120,7 @@ const TransactionHistory = () => {
           >
             <GrFormPrevious />
           </button>
-          {totalPagesArray.map((num) => (
+          {pages.map((num) => (
             <button
               className={`px-3 py-1 bg-gray-200 text-header-text rounded hover:bg-primary hover:text-white ${page == num ? "bg-primary text-white disabled:cursor-not-allowed" : ""} font-body cursor-pointer text-xs`}
               onClick={() => setPage(num)}
@@ -127,7 +130,23 @@ const TransactionHistory = () => {
               {num}
             </button>
           ))}
-
+          <input
+            type="number"
+            placeholder="Page #"
+            className={`w-16 px-3 py-1 bg-gray-200 text-header-text rounded hover:bg-primary hover:text-white font-body cursor-text text-xs focus:outline-none no-spinner`}
+            onKeyDown={(e) => {
+              if (e.key == "Enter") {
+                setPage(e.target.value);
+              }
+            }}
+          />
+          <button
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
+            onClick={() => setPage(totalPages)}
+            disabled={page >= totalPages}
+          >
+            {totalPages}
+          </button>
           <button
             className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
             onClick={() => setPage((prev) => prev + 1)}

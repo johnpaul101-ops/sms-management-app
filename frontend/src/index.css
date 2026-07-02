@@ -16,6 +16,16 @@
   --font-body: "Inter", sans-serif;
 }
 
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
 @theme {
   --color-dark-bg-main: #0f172a;
   --color-dark-bg-sidebar: #1e293b;
