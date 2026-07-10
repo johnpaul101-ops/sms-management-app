@@ -23,8 +23,16 @@ const AnosimActivation = () => {
 
   const countryList = [
     {
+      id: 17,
+      country: "Austria",
+    },
+    {
       id: 98,
       country: "Germany",
+    },
+    {
+      id: 262,
+      country: "Switzerland",
     },
   ];
 
@@ -69,8 +77,6 @@ const AnosimActivation = () => {
 
         if (!response.ok)
           throw new Error(`${response.status}: ${data.message}`);
-
-        console.log(data);
 
         if (data && data.length > 0) {
           const product = data[0];

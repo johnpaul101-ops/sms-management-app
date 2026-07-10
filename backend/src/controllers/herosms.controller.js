@@ -2,6 +2,7 @@ import Transaction from "../models/transaction.model.js";
 import User from "../models/user.model.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { getExpirationTime, getTimeStamp } from "../utils/dateUtils.js";
 dotenv.config();
 
 const API_KEY = process.env.HEROSMS_API_KEY;
@@ -111,11 +112,7 @@ export const heroSmsActivateSMS = async (req, res) => {
       const expirationTime = new Date(
         now.getTime() + duration * 60 * 60 * 1000,
       );
-      let timeStamp = now.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
+
       const user = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).json({
@@ -134,7 +131,7 @@ export const heroSmsActivateSMS = async (req, res) => {
         price: data.activationCost,
         startTime: now.toISOString(),
         endTime: expirationTime.toISOString(),
-        timeStamp: timeStamp,
+        timeStamp: getTimeStamp(now),
         status: "pending",
       });
 
@@ -179,13 +176,7 @@ export const heroSmsActivateSMS = async (req, res) => {
       }
 
       const now = new Date();
-      const expirationTime = new Date(now.getTime() + 20 * 60 * 1000);
-      let timeStamp = now.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "Asia/Manila",
-      });
+
       const user = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).json({
@@ -204,8 +195,8 @@ export const heroSmsActivateSMS = async (req, res) => {
         service: serviceName,
         price: parsedData.activationCost,
         startTime: now.toISOString(),
-        endTime: expirationTime.toISOString(),
-        timeStamp: timeStamp,
+        endTime: getExpirationTime(now, 20),
+        timeStamp: getTimeStamp(now),
         status: "pending",
       });
 

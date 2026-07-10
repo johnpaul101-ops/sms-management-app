@@ -25,6 +25,10 @@ const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
       path: "/herosms",
     },
     {
+      name: "SMSBower",
+      path: "/smsbower",
+    },
+    {
       name: "5Sim",
       path: "/fivesim",
     },

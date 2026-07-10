@@ -130,23 +130,29 @@ const TransactionHistory = () => {
               {num}
             </button>
           ))}
-          <input
-            type="number"
-            placeholder="Page #"
-            className={`w-16 px-3 py-1 bg-gray-200 text-header-text rounded hover:bg-primary hover:text-white font-body cursor-text text-xs focus:outline-none no-spinner`}
-            onKeyDown={(e) => {
-              if (e.key == "Enter") {
-                setPage(e.target.value);
-              }
-            }}
-          />
-          <button
-            className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
-            onClick={() => setPage(totalPages)}
-            disabled={page >= totalPages}
-          >
-            {totalPages}
-          </button>
+          {totalPages > 10 ? (
+            <>
+              <input
+                type="number"
+                placeholder="Page #"
+                className={`w-16 px-3 py-1 bg-gray-200 text-header-text rounded hover:bg-primary hover:text-white font-body cursor-text text-xs focus:outline-none no-spinner`}
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    setPage(e.target.value);
+                  }
+                }}
+              />
+              <button
+                className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
+                onClick={() => setPage(totalPages)}
+                disabled={page >= totalPages}
+              >
+                {totalPages}
+              </button>
+            </>
+          ) : (
+            ""
+          )}
           <button
             className="px-2 py-1 bg-gray-200 rounded hover:bg-primary hover:text-white font-body cursor-pointer disabled:cursor-not-allowed text-xs"
             onClick={() => setPage((prev) => prev + 1)}

@@ -135,10 +135,9 @@ const Users = () => {
       </h1>
 
       <div className="w-full max-w-7xl">
-        <div className="grid grid-cols-[2fr_2fr_3fr_2fr_2fr] bg-purple-200 px-4 py-2 rounded-t-md">
+        <div className="grid grid-cols-[2fr_2fr_2fr_2fr] bg-purple-200 px-4 py-2 rounded-t-md">
           <span className="font-body">Name</span>
           <span className="font-body">Email</span>
-          <span className="font-body text-center">Date Created</span>
           <span className="font-body text-center">Status</span>
           <span className="font-body text-center">Action</span>
         </div>
@@ -150,14 +149,13 @@ const Users = () => {
         ) : (
           users.map((user) => (
             <div
-              className="grid grid-cols-[2fr_2fr_3fr_2fr_2fr] bg-purple-100 px-4 py-2 items-center"
+              className="grid grid-cols-[2fr_2fr_2fr_2fr] bg-purple-100 px-4 py-2 items-center"
               key={user._id}
             >
               <span className="font-body">
                 {user.name} {user.isAdmin ? "(Admin)" : ""}
               </span>
               <span className="font-body">{user.email}</span>
-              <span className="font-body text-center">{user?.dateCreated}</span>
               <div className="flex items-center justify-center">
                 <div
                   className={`flex gap-2 border-2 w-fit px-2 py-1 rounded-md ${user.isOnline ? "border-green-400" : "border-gray-600"} items-center`}

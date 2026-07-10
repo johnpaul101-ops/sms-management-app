@@ -21,6 +21,8 @@ import Users from "./views/Users.jsx";
 import TransactionHistory from "./views/TransactionHistory.jsx";
 import { connectSocket, disconnectSocket } from "./lib/socket.js";
 import { useEffect, useState } from "react";
+import SmsBower from "./pages/SmsBower.jsx";
+import SmsBowerActivation from "./views/SmsBowerActivation.jsx";
 
 const App = () => {
   const [user, setUser] = useState(() => {
@@ -95,6 +97,18 @@ const App = () => {
         >
           <Route index element={<Navigate to="activation" replace />} />
           <Route path="activation" element={<HeroSMSActivation />} />
+        </Route>
+
+        <Route
+          path="/smsbower/"
+          element={
+            <ProtectedRoutes>
+              <SmsBower />
+            </ProtectedRoutes>
+          }
+        >
+          <Route index element={<Navigate to="activation" replace />} />
+          <Route path="activation" element={<SmsBowerActivation />} />
         </Route>
 
         <Route

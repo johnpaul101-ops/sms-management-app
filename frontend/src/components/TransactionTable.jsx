@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { IoCopyOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
-import CountdownDisplay from "../components/CountdownDisplay.jsx";
+import CountdownDisplay from "./CountdownDisplay.jsx";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { GrPowerCycle } from "react-icons/gr";
 import { LuMessageSquareMore } from "react-icons/lu";
@@ -9,7 +9,12 @@ import { MdOutlineArrowDropDown } from "react-icons/md";
 import { toast } from "react-toastify";
 import RequestContext from "../contexts/RequestContext.jsx";
 
-const HeroSmsTransactionTable = ({ transaction, activeTransaction }) => {
+const TransactionTable = ({
+  transaction,
+  activeTransaction,
+  router,
+  provider,
+}) => {
   const [downSmsCode, setDownSmsCode] = useState(false);
   const [transacId, setTransacId] = useState("");
   const { baseUrl } = useContext(RequestContext);
@@ -18,7 +23,7 @@ const HeroSmsTransactionTable = ({ transaction, activeTransaction }) => {
     const token = localStorage.getItem("accessToken");
     try {
       const response = await fetch(
-        `${baseUrl}/herosms/status?id=${id}&status=${Number(status)}`,
+        `${baseUrl}/${router}/status?id=${id}&status=${Number(status)}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,7 +37,7 @@ const HeroSmsTransactionTable = ({ transaction, activeTransaction }) => {
 
       const data = await response.json();
       activeTransaction();
-      window.dispatchEvent(new Event("heroSmsRefetchBalance"));
+      window.dispatchEvent(new Event(`${provider}RefetchBalance`));
       return data;
     } catch (error) {
       console.error(error);
@@ -341,4 +346,4 @@ const HeroSmsTransactionTable = ({ transaction, activeTransaction }) => {
   );
 };
 
-export default HeroSmsTransactionTable;
+export default TransactionTable;

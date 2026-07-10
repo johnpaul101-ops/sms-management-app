@@ -1,4 +1,9 @@
-const WHITELISTED_IPS = ["84.32.223.53", "185.138.88.87"];
+const WHITELISTED_IPS = [
+  "84.32.223.53",
+  "185.138.88.87",
+  "167.235.198.205",
+  "2a01:4f8:1c17:6c99::1",
+];
 
 export const verifyProviderIP = (req, res, next) => {
   const incomingIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;

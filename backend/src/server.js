@@ -14,6 +14,7 @@ import transactionsRouter from "./routes/transactions.route.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import User from "./models/user.model.js";
+import smsBowerRouter from "./routes/smsbower.route.js";
 
 dotenv.config();
 
@@ -67,6 +68,7 @@ app.use("/api/v1/smspool", smsPoolRouter);
 app.use("/api/v1/herosms", heroSmsRouter);
 app.use("/api/v1/fivesim", fiveSimRouter);
 app.use("/api/v1/grizzlysms", grizlySmsRouter);
+app.use("/api/v1/smsbower", smsBowerRouter);
 app.use("/api/v1/transactions", transactionsRouter);
 
 io.on("connection", (socket) => {

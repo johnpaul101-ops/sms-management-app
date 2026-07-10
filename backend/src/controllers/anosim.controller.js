@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import User from "../models/user.model.js";
 import Transaction from "../models/transaction.model.js";
 import mongoose from "mongoose";
+import { getExpirationTime, getTimeStamp } from "../utils/dateUtils.js";
 dotenv.config();
 
 const API_KEY = process.env.ANOSIM_API_KEY;
@@ -69,38 +70,34 @@ export const anosimActivateSms = async (req, res) => {
 
     if (!response.ok) {
       const errorText = response.text();
+
       return res
         .status(response.status)
         .json({ message: "Anosim API Error", error: errorText });
     }
 
     const orderData = await response.json();
-
     const now = new Date();
-    const expirationTime = new Date(now.getTime() + 20 * 60 * 1000);
-    let timeStamp = now.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-      timeZone: "Asia/Manila",
-    });
-    const user = await User.findOne({ _id: userId });
-    const booking = orderData.orderBookings?.[0] || {};
 
-    const saveTransaction = await Transaction.create({
-      activationId: booking.id,
-      userId,
-      userName: user.name,
-      phoneNumber: booking.number,
-      provider: "Anosim",
-      country: booking.country,
-      service: booking.service,
-      price: booking.priceInUSD,
-      rentalType: booking.rentalType,
-      startTime: now.toISOString(),
-      endTime: expirationTime.toISOString(),
-      timeStamp: timeStamp,
-      duration: booking.durationInMinutes,
+    const user = await User.findOne({ _id: userId });
+    const booking = orderData?.orderBookings || [];
+
+    const saveTransaction = booking.map(async (smsNum) => {
+      return await Transaction.create({
+        activationId: smsNum.id,
+        userId,
+        userName: user.name,
+        phoneNumber: smsNum.number,
+        provider: "Anosim",
+        country: smsNum.country,
+        service: smsNum.service,
+        price: smsNum.priceInUSD,
+        rentalType: smsNum.rentalType,
+        startTime: now.toISOString(),
+        endTime: getExpirationTime(now, 20),
+        timeStamp: getTimeStamp(now),
+        duration: smsNum.durationInMinutes,
+      });
     });
 
     res.status(200).json({
@@ -232,9 +229,9 @@ export const getSMSById = async (req, res) => {
       },
       {
         $set: {
-          receivedAt: data?.messageDate,
+          receivedAt: data[0]?.messageDate,
         },
-        $addToSet: { smsCode: data?.messageText },
+        $addToSet: { smsCode: data[0]?.messageText },
       },
       { returnDocument: "after" },
     );
