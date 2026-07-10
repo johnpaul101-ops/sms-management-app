@@ -57,21 +57,42 @@ ricesV2&service=${serviceCode}&country=${countryId}`,
 };
 
 export const smsBowerActivateSms = async (req, res) => {
-  const { serviceCode, countryId, serviceName, countryName } = req.body;
+  const { serviceCode, countryId, serviceName, countryName, price } = req.body;
   const userId = req.user.id;
+  let numPrice = parseFloat(price);
   try {
-    const response =
-      await fetch(`https://smsbower.page/stubs/handler_api.php?api_key=${API_KEY}&action=getN
-umberV2&service=${serviceCode}&country=${countryId}`);
+    const response = await fetch(
+      `https://smsbower.page/stubs/handler_api.php?api_key=${API_KEY}&action=getNumberV2&service=${serviceCode}&country=${countryId}&maxPrice=${numPrice}&minPrice=${numPrice}`,
+    );
 
-    if (!response.ok) {
-      const errorMessage = await response.json();
-      return res.status(response.status).json({
-        message: `SMSBOWER API ERROR! ${response.status}: ${errorMessage.message}`,
+    const data = await response.text();
+
+    if (data.includes("NO_NUMBERS")) {
+      return res.json({
+        success: false,
+        message: "No numbers are currently available",
       });
     }
 
-    const data = await response.json();
+    let parsedData;
+
+    try {
+      parsedData = JSON.parse(data);
+    } catch (parseError) {
+      console.error("Failed to parse JSON response:", data);
+      return res.status(500).json({
+        success: false,
+        message: "Unexpected response format from SMS provider",
+        raw_response: data,
+      });
+    }
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        success: false,
+        message: parsedData.message || "API Error occurred",
+      });
+    }
 
     const now = new Date();
     const user = await User.findOne({ _id: userId });
@@ -82,14 +103,14 @@ umberV2&service=${serviceCode}&country=${countryId}`);
       });
     }
     const saveTransaction = await Transaction.create({
-      activationId: data.activationId,
+      activationId: parsedData.activationId,
       userId,
       userName: user.name,
-      phoneNumber: data.phoneNumber,
+      phoneNumber: parsedData.phoneNumber,
       provider: "SMSBower",
       country: countryName,
       service: serviceName,
-      price: data.activationCost,
+      price: parsedData.activationCost,
       startTime: now.toISOString(),
       endTime: getExpirationTime(now, 25),
       timeStamp: getTimeStamp(now),

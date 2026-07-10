@@ -100,6 +100,7 @@ const SmsBowerActivation = () => {
           countryId,
           countryName,
           serviceName,
+          price,
         }),
       });
 
