@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import RequestContext from "../contexts/RequestContext";
 import { toast } from "react-toastify";
-const SignUp = () => {
+import { LuEye } from "react-icons/lu";
+import { LuEyeClosed } from "react-icons/lu";
+
+const CreateUser = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { baseUrl } = useContext(RequestContext);
-
-  let navigate = useNavigate();
 
   const handleCreateAccount = async (e) => {
     e.preventDefault();
@@ -35,7 +36,9 @@ const SignUp = () => {
           return;
         }
 
-        navigate("/login");
+        setName("");
+        setEmail("");
+        setPassword("");
         resolve(data);
       } catch (error) {
         reject(error);
@@ -58,18 +61,18 @@ const SignUp = () => {
   };
 
   return (
-    <main className="bg-main-bg h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center h-full">
       <form
         className="flex flex-col p-4 gap-5 w-lg  bg-surface border border-border-color rounded-lg"
         onSubmit={handleCreateAccount}
       >
         <h1 className="text-header-text font-heading text-center text-2xl">
-          Sign Up
+          Create User
         </h1>
 
         <div className="flex flex-col gap-2">
           <label htmlFor="name" className="text-secondary-text font-body">
-            Name
+            Display Name
           </label>
           <input
             type="text"
@@ -82,14 +85,14 @@ const SignUp = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="text-secondary-text font-body">
-            Email
+          <label htmlFor="username" className="text-secondary-text font-body">
+            Username
           </label>
           <input
             type="text"
-            name="email"
+            name="username"
             className="bg-surface-2 focus:outline-none rounded-md px-3 py-2"
-            placeholder="Enter your email"
+            placeholder="Enter your username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -99,14 +102,24 @@ const SignUp = () => {
           <label htmlFor="password" className="text-secondary-text font-body">
             Password
           </label>
-          <input
-            type="password"
-            name="password"
-            className="bg-surface-2 focus:outline-none rounded-md px-3 py-2"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              className="bg-surface-2 focus:outline-none rounded-md px-3 py-2 w-full"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button
+              type="button"
+              className="absolute top-3 right-5 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <LuEyeClosed /> : <LuEye />}
+            </button>
+          </div>
         </div>
 
         <button
@@ -115,16 +128,9 @@ const SignUp = () => {
         >
           Create Account
         </button>
-
-        <span className="font-body text-secondary-text text-center">
-          Don't have an account?{" "}
-          <Link className="text-[#8B5CF6]" to={"/login"}>
-            Sign In
-          </Link>
-        </span>
       </form>
-    </main>
+    </div>
   );
 };
 
-export default SignUp;
+export default CreateUser;

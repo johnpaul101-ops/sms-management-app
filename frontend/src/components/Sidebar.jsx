@@ -11,7 +11,7 @@ const Sidebar = ({ links, mainPath }) => {
 
   return (
     <aside
-      className={`w-80 min-h-[85vh] flex flex-col gap-4 pt-5 rounded-2xl bg-surface dark:bg-dark-bg-card fixed lg:static ${openSidebar ? "left-0" : "-left-96"} transition-all duration-200 ease-in-out border border-border-color dark:border-dark-border pb-10 shadow-2xl`}
+      className={`w-80 min-h-[85vh] flex flex-col gap-4 pt-5 rounded-2xl bg-surface dark:bg-dark-bg-card fixed lg:static ${openSidebar ? "left-0" : "-left-96"} transition-all duration-200 ease-in-out border border-border-color dark:border-dark-border pb-10 shadow-2xl z-40`}
     >
       <span className="text-xl text-center font-heading text-header-text dark:text-dark-text-main">
         {name} {user.isAdmin ? "( Admin )" : ""}

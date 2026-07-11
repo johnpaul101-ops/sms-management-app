@@ -5,7 +5,6 @@ import {
   replace,
 } from "react-router-dom";
 import Login from "./pages/Login.jsx";
-import SignUp from "./pages/SignUp.jsx";
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Anosim from "./pages/Anosim.jsx";
@@ -23,6 +22,7 @@ import { connectSocket, disconnectSocket } from "./lib/socket.js";
 import { useEffect, useState } from "react";
 import SmsBower from "./pages/SmsBower.jsx";
 import SmsBowerActivation from "./views/SmsBowerActivation.jsx";
+import CreateUser from "./views/CreateUser.jsx";
 
 const App = () => {
   const [user, setUser] = useState(() => {
@@ -51,7 +51,6 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/login" element={<Login setUserData={setUser} />} />
-        <Route path="/sign-up" element={<SignUp />} />
 
         <Route
           path="/admin"
@@ -63,6 +62,7 @@ const App = () => {
         >
           <Route index element={<Navigate to="users" replace />} />
           <Route path="users" element={<Users />} />
+          <Route path="create-user" element={<CreateUser />} />
           <Route path="activation-history" element={<TransactionHistory />} />
         </Route>
 

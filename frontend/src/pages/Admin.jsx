@@ -9,6 +9,10 @@ const Admin = () => {
       path: "users",
     },
     {
+      name: "Create User",
+      path: "create-user",
+    },
+    {
       name: "Activation History",
       path: "activation-history",
     },

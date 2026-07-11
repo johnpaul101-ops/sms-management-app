@@ -10,26 +10,10 @@ export const createAccount = async (req, res) => {
     if (!email || typeof email !== "string") {
       return res
         .status(400)
-        .json({ message: "Email is required and must be a string" });
+        .json({
+          message: "Email or Username is required and must be a string",
+        });
     }
-
-    const cleanEmail = email.trim();
-
-    if (cleanEmail.includes(" ")) {
-      return res
-        .status(400)
-        .json({ message: "Spaces are not allowed inside the email" });
-    }
-
-    const gmailRegex = /^[^@\s]+@gmail\.com$/i;
-
-    if (!gmailRegex.test(cleanEmail)) {
-      return res.status(400).json({
-        message: "Please provide a valid Gmail address (e.g., user@gmail.com)",
-      });
-    }
-
-    const finalizedEmail = cleanEmail.toLowerCase();
 
     const user = await User.findOne({ email });
 
@@ -45,7 +29,7 @@ export const createAccount = async (req, res) => {
     });
     const newUser = await User.create({
       name,
-      email: finalizedEmail,
+      email: email,
       password: hashedPassword,
       isAdmin: false,
       dateCreated,

@@ -1,11 +1,14 @@
 import { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { LuEye } from "react-icons/lu";
+import { LuEyeClosed } from "react-icons/lu";
 import RequestContext from "../contexts/RequestContext.jsx";
+
 const Login = ({ setUserData }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const { baseUrl } = useContext(RequestContext);
   let navigate = useNavigate();
 
@@ -77,7 +80,7 @@ const Login = ({ setUserData }) => {
             type="text"
             name="email"
             className="bg-surface-2 focus:outline-none rounded-md px-3 py-2"
-            placeholder="Enter your email"
+            placeholder="Enter your email or username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -87,14 +90,24 @@ const Login = ({ setUserData }) => {
           <label htmlFor="password" className="text-secondary-text font-body">
             Password
           </label>
-          <input
-            type="password"
-            name="password"
-            className="bg-surface-2 focus:outline-none rounded-md px-3 py-2"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              className="bg-surface-2 focus:outline-none rounded-md px-3 py-2 w-full"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button
+              type="button"
+              className="absolute top-3 right-5 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <LuEyeClosed /> : <LuEye />}
+            </button>
+          </div>
         </div>
 
         <button
@@ -103,13 +116,6 @@ const Login = ({ setUserData }) => {
         >
           Sign In
         </button>
-
-        <span className="font-body text-secondary-text text-center">
-          Don't have an account?{" "}
-          <Link className="text-[#8B5CF6]" to={"/sign-up"}>
-            Sign Up
-          </Link>
-        </span>
       </form>
     </main>
   );
