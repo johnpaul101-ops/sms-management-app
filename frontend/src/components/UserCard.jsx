@@ -15,7 +15,10 @@ const UserCard = ({
       ) : (
         <div className="flex md:min-[852px]:hidden flex-col w-full bg-purple-200 gap-4 rounded-md overflow-y-auto h-[80vh] [&::-webkit-scrollbar]:hidden">
           {users?.map((user) => (
-            <div className="flex flex-col gap-3 p-3 border-b border-gray-400">
+            <div
+              className="flex flex-col gap-3 p-3 border-b border-gray-400"
+              key={user._id}
+            >
               <div className="flex items-center justify-between">
                 <span className="font-body">
                   {user.name} {user.isAdmin ? "(Admin)" : ""}

@@ -67,7 +67,10 @@ const AnosimTransactionTable = ({ transaction, activeTransaction }) => {
       {transaction?.length > 0 ? (
         <>
           {transaction?.map((tx) => (
-            <div className="flex flex-col bg-purple-100 px-5 py-4 border-b border-zinc-400 gap-3">
+            <div
+              className="flex flex-col bg-purple-100 px-5 py-4 border-b border-zinc-400 gap-3"
+              key={tx._id}
+            >
               <div className="grid grid-cols-[1fr_1fr_3fr_1fr_1fr_2fr_1fr] items-center">
                 <span className="font-body text-xs md:text-sm">
                   {tx.service}

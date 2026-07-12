@@ -54,12 +54,12 @@ export const anosimGetProductPrices = async (req, res) => {
 };
 
 export const anosimActivateSms = async (req, res) => {
-  const { productId, amount, provId } = req.body;
+  const { productId, amount, provId, price } = req.body;
   const userId = req.user.id;
 
   try {
     const response = await fetch(
-      `https://anosim.net/api/v1/Orders?apikey=${API_KEY}&productId=${productId}&amount=${amount}&providerId=${provId}`,
+      `https://anosim.net/api/v1/Orders?apikey=${API_KEY}&productId=${productId}&amount=${amount}&providerId=${provId}&maxPrice=${price}`,
       {
         method: "POST",
         headers: {
@@ -222,7 +222,6 @@ export const getSMSById = async (req, res) => {
     }
 
     const data = await response.json();
-
     const updateTransaction = await Transaction.findOneAndUpdate(
       {
         $or: [{ activationId: String(id) }, { activationId: Number(id) }],

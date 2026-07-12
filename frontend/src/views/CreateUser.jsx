@@ -107,7 +107,7 @@ const CreateUser = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               className="bg-surface-2 focus:outline-none rounded-md px-3 py-2 w-full"
-              placeholder="Enter your password"
+              placeholder="Enter user password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

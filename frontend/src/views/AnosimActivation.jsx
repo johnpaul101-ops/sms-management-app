@@ -11,9 +11,9 @@ const AnosimActivation = () => {
   const [countryId, setCountryId] = useState("");
   const [service, setService] = useState("");
   const [serviceId, setServiceId] = useState("");
+  const [priceMap, setPriceMap] = useState([]);
   const [price, setPrice] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [providerList, setProviderList] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [productId, setProductId] = useState("");
   const [provId, setProvId] = useState("0");
   const [amount, setAmount] = useState(1);
@@ -80,22 +80,11 @@ const AnosimActivation = () => {
 
         if (data && data.length > 0) {
           const product = data[0];
-
-          setPrice(product.basePrice);
-          setDuration(product.durationInMinutes);
           setProductId(product.id);
-
-          if (product.priceMap && product.priceMap.length > 0) {
-            const firstPriceMap = product.priceMap[0];
-
-            setProviderList(firstPriceMap.providers || []);
-          } else {
-            setProviderList([]);
-          }
+          setPriceMap(product.priceMap.map((item) => item));
         } else {
           console.log("No product found");
         }
-        console.log(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -119,7 +108,7 @@ const AnosimActivation = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ productId, amount, provId }),
+          body: JSON.stringify({ productId, amount, provId, price }),
         });
 
         const data = await response.json();
@@ -200,7 +189,7 @@ const AnosimActivation = () => {
 
       const currentItem = transaction[indexToFetch];
 
-      const currentId = currentItem?._id || currentItem;
+      const currentId = currentItem?.activationId || currentItem;
 
       if (!currentId || currentId === "undefined") {
         currentIndex.current += 1;
@@ -301,11 +290,34 @@ const AnosimActivation = () => {
           ) : (
             <>
               {serviceId ? (
-                <div className="flex justify-between items-center px-4 bg-zinc-400 w-full py-3 rounded-md">
-                  <span className="text-lg text-white">{duration}m</span>
-                  <span className="bg-surface-2 px-3 py-0.5 rounded-md text-lg">
-                    ${price}
-                  </span>
+                <div className="flex flex-col">
+                  <h1 className="bg-surface-2 px-5 py-3 text-sm md:text-lg lg:text-xl rounded-t-md font-body">
+                    Prices
+                  </h1>
+
+                  <div className="bg-surface-2 px-5 py-3 rounded-b-md flex flex-col gap-5">
+                    {priceMap?.map((item, i) => (
+                      <div
+                        className="flex justify-between items-center cursor-pointer"
+                        key={i}
+                      >
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            className="size-6 accent-purple cursor-pointer"
+                            value={item.price}
+                            checked={item.price == price}
+                            onChange={(e) => {
+                              setPrice(e.target.value);
+                              setSelectedItem(item);
+                            }}
+                          />
+                          <span>${item.price}</span>
+                        </div>
+                        <span>{item.providers[0].availableCount} pcs</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
@@ -325,11 +337,11 @@ const AnosimActivation = () => {
             </div>
           ) : (
             <>
-              {serviceId ? (
+              {selectedItem ? (
                 <div className="flex flex-col bg-surface-2 p-3 rounded-md gap-5">
-                  {providerList.length > 0 ? (
+                  {selectedItem.providers.length > 0 ? (
                     <>
-                      {providerList?.map(
+                      {selectedItem.providers.map(
                         ({ availableCount, name, providerId }) => (
                           <div
                             className={`flex justify-between items-center border-b border-zinc-400 rounded-md py-3 px-2 cursor-pointer ${providerId == provId ? "bg-zinc-400" : ""}`}
