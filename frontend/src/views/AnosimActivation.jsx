@@ -62,6 +62,8 @@ const AnosimActivation = () => {
     const getProductPrice = async () => {
       const token = localStorage.getItem("accessToken");
 
+      setSelectedItem(null);
+      setPrice(0);
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -370,7 +372,7 @@ const AnosimActivation = () => {
               ) : (
                 <div className="bg-surface-2 w-full px-2 py-3 rounded-md">
                   <span className="text-zinc-500 text-center">
-                    Select a Service to Show Provider
+                    Select a Price to Show Provider
                   </span>
                 </div>
               )}
