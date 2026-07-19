@@ -127,7 +127,7 @@ export const anosimCancelActivation = async (req, res) => {
 
     if (!response.ok) {
       const errorText = response.text();
-      res.status(response.status).json({
+      return res.status(response.status).json({
         message: "Failed to cancel sms activation in Anosim",
         error: errorText,
       });

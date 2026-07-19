@@ -59,7 +59,7 @@ const TransactionHistory = () => {
     { length: Math.min(10, totalPages) },
     (_, i) => i + 1,
   );
-  console.log(category);
+
   return (
     <div className="flex flex-col gap-5 p-1 lg:p-5 overflow-y-auto items-center relative">
       <h1 className="text-xl md:text-5xl text-header-text dark:text-dark-text-main font-heading">

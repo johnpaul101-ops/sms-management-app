@@ -56,7 +56,6 @@ const Users = () => {
         throw new Error(`${response.status}: ${errorMessage.message}`);
       }
 
-      alert("Are you sure you want to delete this user?");
       const data = await response.json();
       setUsers((prev) => prev.filter((user) => user._id !== id));
 
@@ -69,6 +68,9 @@ const Users = () => {
   };
 
   const handleDeleteUser = async (id) => {
+    if (!confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
     const deleteUserPromise = deleteUser(id);
 
     toast.promise(deleteUserPromise, {
@@ -102,7 +104,6 @@ const Users = () => {
         throw new Error(`${response.status}: ${errorMessage.message}`);
       }
 
-      alert("Are you sure you want to make this user admin?");
       const data = await response.json();
       setIsLoading(false);
       return data;
@@ -113,6 +114,9 @@ const Users = () => {
   };
 
   const handleMakeUserAdmin = async (id) => {
+    if (!confirm("Are you sure you want to make this user admin?")) {
+      return;
+    }
     const makeUserAdminPromise = makeUserAdmin(id);
 
     toast.promise(makeUserAdminPromise, {
