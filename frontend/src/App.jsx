@@ -42,7 +42,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      connectSocket(user.data.user._id);
+      connectSocket(user?.data?.user?._id);
     } else {
       disconnectSocket();
     }

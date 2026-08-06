@@ -65,6 +65,10 @@ const HeroSMSActivation = () => {
       name: "LOVOO",
       code: "bpc",
     },
+    {
+      name: "WEBDE",
+      code: "abo",
+    },
   ];
 
   useEffect(() => {

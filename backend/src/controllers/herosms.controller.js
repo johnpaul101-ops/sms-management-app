@@ -99,12 +99,25 @@ export const heroSmsActivateSMS = async (req, res) => {
         `https://hero-sms.com/stubs/handler_api.php?action=getRentNumber&service=${serviceCode}&country=${countryId}&duration=${duration}&api_key=${API_KEY}`,
       );
 
-      const data = await response.json();
+      const text = await response.text();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        console.error("Failed to parse JSON response (Rent):", text);
+        return res.status(502).json({
+          success: false,
+          message:
+            "SMS Provider is currently unavailable (Cloudflare/503 error)",
+          raw_response: text,
+        });
+      }
 
       if (!response.ok) {
         return res.json({
           success: false,
-          message: data.details,
+          message: data.details || "API Error occurred",
         });
       }
 
