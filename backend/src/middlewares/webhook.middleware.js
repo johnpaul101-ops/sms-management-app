@@ -3,6 +3,7 @@ const WHITELISTED_IPS = [
   "185.138.88.87",
   "167.235.198.205",
   "2a01:4f8:1c17:6c99::1",
+  "2a09:bac5:34b5:14dc::214:ae",
 ];
 
 export const verifyProviderIP = (req, res, next) => {

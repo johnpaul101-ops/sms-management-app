@@ -324,7 +324,7 @@ const HeroSMSActivation = () => {
                       No numbers
                     </span>
                   ) : (
-                    <div className="bg-surface-2 px-5 py-3 rounded-b-md flex flex-col gap-5">
+                    <div className="bg-surface-2 px-5 py-3 rounded-b-md flex flex-col gap-5 max-h-96 h-fit overflow-auto">
                       {Object.entries(offers).map(([priceKey, pcsValue]) => (
                         <div
                           key={priceKey}

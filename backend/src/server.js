@@ -15,6 +15,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import User from "./models/user.model.js";
 import smsBowerRouter from "./routes/smsbower.route.js";
+import smsCodeRouter from "./routes/smscode.route.js";
 
 dotenv.config();
 
@@ -69,6 +70,7 @@ app.use("/api/v1/herosms", heroSmsRouter);
 app.use("/api/v1/fivesim", fiveSimRouter);
 app.use("/api/v1/grizzlysms", grizlySmsRouter);
 app.use("/api/v1/smsbower", smsBowerRouter);
+app.use("/api/v1/smscode", smsCodeRouter);
 app.use("/api/v1/transactions", transactionsRouter);
 
 io.on("connection", (socket) => {

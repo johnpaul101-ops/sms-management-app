@@ -23,6 +23,8 @@ import { useEffect, useState } from "react";
 import SmsBower from "./pages/SmsBower.jsx";
 import SmsBowerActivation from "./views/SmsBowerActivation.jsx";
 import CreateUser from "./views/CreateUser.jsx";
+import SmsCode from "./pages/SmsCode.jsx";
+import SmsCodeActivation from "./views/SmsCodeActivation.jsx";
 
 const App = () => {
   const [user, setUser] = useState(() => {
@@ -109,6 +111,18 @@ const App = () => {
         >
           <Route index element={<Navigate to="activation" replace />} />
           <Route path="activation" element={<SmsBowerActivation />} />
+        </Route>
+
+        <Route
+          path="/smscode/"
+          element={
+            <ProtectedRoutes>
+              <SmsCode />
+            </ProtectedRoutes>
+          }
+        >
+          <Route index element={<Navigate to="activation" replace />} />
+          <Route path="activation" element={<SmsCodeActivation />} />
         </Route>
 
         <Route

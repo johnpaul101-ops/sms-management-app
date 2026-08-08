@@ -29,6 +29,10 @@ const Navbar = ({ hasBalance, balance, hasSidebar, isLoading }) => {
       path: "/smsbower",
     },
     {
+      name: "SMSCode",
+      path: "/smscode",
+    },
+    {
       name: "5Sim",
       path: "/fivesim",
     },
