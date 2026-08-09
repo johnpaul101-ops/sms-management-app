@@ -2,6 +2,7 @@ import Transaction from "../models/transaction.model.js";
 import User from "../models/user.model.js";
 import { getExpirationTime, getTimeStamp } from "../utils/dateUtils.js";
 import mongoose from "mongoose";
+import { parseSmsResponse } from "../utils/parserFunction.js";
 const API_KEY = process.env.SMSBOWER_API_KEY;
 
 const fetchBalance = async () => {
@@ -200,6 +201,7 @@ export const smsBowerWebhook = async (req, res) => {
     return res.status(400).send("Invalid Payload");
   }
 
+  res.status(200).send("OK");
   try {
     await Transaction.findOneAndUpdate(
       {
@@ -215,8 +217,6 @@ export const smsBowerWebhook = async (req, res) => {
         $addToSet: { smsCode: code },
       },
     );
-
-    return res.status(200).send("OK");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Error");
@@ -268,5 +268,66 @@ export const smsBowerChangeActivationStatus = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error" });
     console.error(error);
+  }
+};
+
+export const smsBowerGetCode = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await fetch(
+      `https://smsbower.page/stubs/handler_api.php?api_key=${API_KEY}&action=getStatus&id=${id}`,
+    );
+
+    if (!response.ok) {
+      return res
+        .status(response.status)
+        .json({ message: "Failed to connect to SMS provider", success: false });
+    }
+
+    const rawData = await response.text();
+    const parsed = parseSmsResponse(rawData);
+
+    if (parsed.status === "SUCCESS") {
+      await Transaction.findOneAndUpdate(
+        {
+          $or: [{ activationId: String(id) }, { activationId: Number(id) }],
+        },
+        {
+          $set: { receivedAt: new Date() },
+          $addToSet: { smsCode: parsed.code },
+        },
+      );
+
+      return res.status(200).json({
+        message:
+          "SMS request processed. Please make sure to enter the latest code received.",
+        success: true,
+      });
+    }
+
+    if (parsed.status === "PENDING" || parsed.status === "RETRY_WAIT") {
+      return res.status(200).json({
+        message: "No SMS code received. Please wait or try resending.",
+        success: false,
+      });
+    }
+
+    if (parsed.status === "CANCELLED") {
+      return res.status(200).json({
+        message: "Activation canceled.",
+        success: false,
+      });
+    }
+
+    return res.status(400).json({
+      message: `SMS Provider Error: ${parsed.message}`,
+      success: false,
+    });
+  } catch (error) {
+    console.error("SMSBower Controller Error:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", success: false });
   }
 };

@@ -5,6 +5,7 @@ import {
   smsCodeChangeActivationStatus,
   smsCodeChangeStatus,
   smsCodeGetBalance,
+  smsCodeGetCode,
   smsCodeWebhook,
 } from "../controllers/smscode.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
@@ -22,4 +23,5 @@ smsCodeRouter.post("/price-list", authMiddleware, getPriceList);
 smsCodeRouter.post("/activate", authMiddleware, smsCodeActivateSms);
 smsCodeRouter.post("/status", authMiddleware, smsCodeChangeStatus);
 smsCodeRouter.post("/webhook", verifyProviderIP, smsCodeWebhook);
+smsCodeRouter.patch("/get-code/:id", authMiddleware, smsCodeGetCode);
 export default smsCodeRouter;

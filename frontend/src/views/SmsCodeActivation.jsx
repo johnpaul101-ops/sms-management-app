@@ -70,7 +70,7 @@ const SmsCodeActivation = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+
         setPriceList(data.data || []);
       } catch (error) {
         console.error(error);
@@ -101,9 +101,9 @@ const SmsCodeActivation = () => {
             quantity: quantity,
           }),
         });
-        console.log(response);
+
         const data = await response.json();
-        console.log(data);
+
         if (!response.ok) {
           reject(
             new Error(

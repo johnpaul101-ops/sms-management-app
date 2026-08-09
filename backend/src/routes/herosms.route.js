@@ -5,6 +5,7 @@ import {
   heroSmsChangeSmsStatus,
   heroSmsChangeStatus,
   heroSmsGetBalance,
+  heroSmsGetCode,
   heroSmsOffers,
   heroSmsWebhook,
 } from "../controllers/herosms.controller.js";
@@ -20,4 +21,5 @@ heroSmsRouter.get("/status", authMiddleware, heroSmsChangeStatus);
 heroSmsRouter.post("/webhook", verifyProviderIP, heroSmsWebhook);
 heroSmsRouter.post("/rental-prices", authMiddleware, getCurrentPricesForRent);
 heroSmsRouter.get("/change-status", authMiddleware, heroSmsChangeSmsStatus);
+heroSmsRouter.patch("/get-code/:id", authMiddleware, heroSmsGetCode);
 export default heroSmsRouter;

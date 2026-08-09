@@ -298,6 +298,7 @@ export const heroSmsWebhook = async (req, res) => {
     return res.status(400).send("Invalid Payload");
   }
 
+  res.status(200).send("OK");
   try {
     await Transaction.findOneAndUpdate(
       {
@@ -313,8 +314,6 @@ export const heroSmsWebhook = async (req, res) => {
         $addToSet: { smsCode: code },
       },
     );
-
-    return res.status(200).send("OK");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Error");
@@ -365,6 +364,55 @@ export const heroSmsChangeSmsStatus = async (req, res) => {
     res.json(updatedActiveList);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
+    console.error(error);
+  }
+};
+
+export const heroSmsGetCode = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await fetch(
+      `https://hero-sms.com/stubs/handler_api.php?action=getStatusV2&id=${id}&api_key=${API_KEY}`,
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      return res
+        .status(response.status)
+        .json({ message: `${errorMessage.title}: ${errorMessage.details}` });
+    }
+
+    const data = await response.json();
+
+    if (!data.sms?.code) {
+      return res.status(200).json({
+        message: "No SMS code received. Please wait or try resending.",
+        success: false,
+      });
+    }
+
+    await Transaction.findOneAndUpdate(
+      {
+        $or: [{ activationId: String(id) }, { activationId: Number(id) }],
+      },
+      {
+        $set: {
+          receivedAt: data.sms?.dateTime
+            ? new Date(data.sms?.dateTime)
+            : new Date(),
+        },
+        $addToSet: { smsCode: data.sms?.code },
+      },
+    );
+
+    res.status(200).json({
+      message:
+        "SMS request processed. Please make sure to enter the latest code received.",
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", success: false });
     console.error(error);
   }
 };

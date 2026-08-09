@@ -251,10 +251,11 @@ export const smsCodeWebhook = async (req, res) => {
     return res.status(400).send("Invalid Payload");
   }
 
-  if (data.event != "order.otp_received") {
-    return res.status(400).send("Invalid Event");
+  if (data.event !== "order.otp_received") {
+    return res.status(200).send("Event Ignored");
   }
 
+  res.status(200).send("OK");
   try {
     const updateData = {
       $set: {
@@ -275,10 +276,57 @@ export const smsCodeWebhook = async (req, res) => {
       },
       updateData,
     );
-
-    return res.status(200).send("OK");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Error");
+  }
+};
+
+export const smsCodeGetCode = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await fetch(`https://api.smscode.gg/v2/orders/${id}`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      return res.status(response.status).json({
+        message: `${errorMessage.error.code}: ${errorMessage.error.message}`,
+      });
+    }
+
+    const data = await response.json();
+
+    if (!data.data?.otp_code) {
+      return res.status(200).json({
+        message: "No SMS code received. Please wait or try resending.",
+        success: false,
+      });
+    }
+
+    await Transaction.findOneAndUpdate(
+      {
+        $or: [{ activationId: String(id) }, { activationId: Number(id) }],
+      },
+      {
+        $set: {
+          receivedAt: data.data?.otp_received_at
+            ? new Date(data.data?.otp_received_at)
+            : new Date(),
+        },
+        $addToSet: { smsCode: data.data?.otp_code },
+      },
+    );
+
+    res.status(200).json({
+      message:
+        "SMS request processed. Please make sure to enter the latest code received.",
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", success: false });
+    console.error(error);
   }
 };

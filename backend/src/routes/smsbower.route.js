@@ -3,6 +3,7 @@ import {
   smsBowerActivateSms,
   smsBowerChangeActivationStatus,
   smsBowerGetBalance,
+  smsBowerGetCode,
   smsBowerGetPrices,
   smsBowerSmsChangeStatus,
   smsBowerWebhook,
@@ -22,4 +23,5 @@ smsBowerRouter.get(
 smsBowerRouter.post("/get-prices", authMiddleware, smsBowerGetPrices);
 smsBowerRouter.post("/activate", authMiddleware, smsBowerActivateSms);
 smsBowerRouter.post("/webhook", verifyProviderIP, smsBowerWebhook);
+smsBowerRouter.patch("/get-code/:id", authMiddleware, smsBowerGetCode);
 export default smsBowerRouter;

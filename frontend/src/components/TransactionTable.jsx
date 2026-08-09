@@ -8,6 +8,7 @@ import { LuMessageSquareMore } from "react-icons/lu";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { toast } from "react-toastify";
 import RequestContext from "../contexts/RequestContext.jsx";
+import { HiMagnifyingGlass } from "react-icons/hi2";
 
 const TransactionTable = ({
   transaction,
@@ -66,6 +67,47 @@ const TransactionTable = ({
   const handleGetTransactionId = (id) => {
     setDownSmsCode((prev) => !prev);
     setTransacId(id);
+  };
+
+  const checkSmsStatus = async (id) => {
+    const token = localStorage.getItem("accessToken");
+    try {
+      const response = await fetch(`${baseUrl}/${router}/get-code/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        throw new Error(`${response.status}: ${errorMessage.message}`);
+      }
+
+      const data = await response.json();
+      activeTransaction();
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const handleCheckSmsStatus = async (id) => {
+    const cancelPromise = checkSmsStatus(id);
+
+    toast.promise(cancelPromise, {
+      pending: "Loading...",
+      success: {
+        render({ data }) {
+          return data?.message || "Successfully checked sms status";
+        },
+      },
+      error: {
+        render({ data }) {
+          return data?.message || "Something went wrong!";
+        },
+      },
+    });
   };
   return (
     <>
@@ -164,23 +206,39 @@ const TransactionTable = ({
 
                 {tx?.smsCode.length > 0 ? (
                   <div className="flex gap-3 items-center justify-center">
+                    {/* Check SMS Status */}
                     <div className="relative group flex flex-col items-center">
-                      <span className="absolute text-xs bg-surface-2 p-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:-translate-y-9 transition-all duration-200 ease-in-out cursor-pointer">
+                      <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
+                        Check SMS Status
+                      </span>
+                      <button
+                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
+                        onClick={() => handleCheckSmsStatus(tx.activationId)}
+                      >
+                        <HiMagnifyingGlass />
+                      </button>
+                    </div>
+
+                    {/* Resend SMS */}
+                    <div className="relative group flex flex-col items-center">
+                      <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
                         Resend SMS
                       </span>
                       <button
-                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8"
+                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
                         onClick={() => handleChangeStatus(tx.activationId, 3)}
                       >
                         <GrPowerCycle />
                       </button>
                     </div>
+
+                    {/* Complete Activation */}
                     <div className="relative group flex flex-col items-center">
-                      <span className="absolute text-xs bg-surface-2 p-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:-translate-y-9 transition-all duration-200 ease-in-out cursor-pointer">
+                      <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
                         Complete Activation
                       </span>
                       <button
-                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8"
+                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
                         onClick={() => handleChangeStatus(tx.activationId, 6)}
                       >
                         <IoCheckmarkOutline />
@@ -188,16 +246,32 @@ const TransactionTable = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="relative group flex flex-col items-center">
-                    <span className="absolute text-xs bg-surface-2 p-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:-translate-y-9 transition-all duration-200 ease-in-out cursor-pointer">
-                      Cancel Activation
-                    </span>
-                    <button
-                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8"
-                      onClick={() => handleChangeStatus(tx.activationId, 8)}
-                    >
-                      <RxCross2 />
-                    </button>
+                  <div className="flex gap-3 items-center justify-center">
+                    {/* Cancel Activation Button */}
+                    <div className="relative group flex flex-col items-center">
+                      <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
+                        Cancel Activation
+                      </span>
+                      <button
+                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
+                        onClick={() => handleChangeStatus(tx.activationId, 8)}
+                      >
+                        <RxCross2 />
+                      </button>
+                    </div>
+
+                    {/* Check SMS Status Button */}
+                    <div className="relative group flex flex-col items-center">
+                      <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
+                        Check SMS Status
+                      </span>
+                      <button
+                        className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
+                        onClick={() => handleCheckSmsStatus(tx.activationId)}
+                      >
+                        <HiMagnifyingGlass />
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -299,24 +373,40 @@ const TransactionTable = ({
               </div>
 
               {tx?.smsCode.length > 0 ? (
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-3 items-center justify-center">
+                  {/* Check SMS Status */}
                   <div className="relative group flex flex-col items-center">
-                    <span className="absolute text-xs bg-surface-2 p-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:-translate-y-9 transition-all duration-200 ease-in-out cursor-pointer">
+                    <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
+                      Check SMS Status
+                    </span>
+                    <button
+                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
+                      onClick={() => handleCheckSmsStatus(tx.activationId)}
+                    >
+                      <HiMagnifyingGlass />
+                    </button>
+                  </div>
+
+                  {/* Resend SMS */}
+                  <div className="relative group flex flex-col items-center">
+                    <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
                       Resend SMS
                     </span>
                     <button
-                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8"
+                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
                       onClick={() => handleChangeStatus(tx.activationId, 3)}
                     >
                       <GrPowerCycle />
                     </button>
                   </div>
+
+                  {/* Complete Activation */}
                   <div className="relative group flex flex-col items-center">
-                    <span className="absolute text-xs bg-surface-2 p-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:-translate-y-9 transition-all duration-200 ease-in-out cursor-pointer">
+                    <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
                       Complete Activation
                     </span>
                     <button
-                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8"
+                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
                       onClick={() => handleChangeStatus(tx.activationId, 6)}
                     >
                       <IoCheckmarkOutline />
@@ -324,16 +414,32 @@ const TransactionTable = ({
                   </div>
                 </div>
               ) : (
-                <div className="relative group flex flex-col items-start w-fit">
-                  <span className="absolute text-xs bg-surface-2 p-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:-translate-y-9 transition-all duration-200 ease-in-out cursor-pointer">
-                    Cancel Activation
-                  </span>
-                  <button
-                    className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8"
-                    onClick={() => handleChangeStatus(tx.activationId, 8)}
-                  >
-                    <RxCross2 />
-                  </button>
+                <div className="flex gap-3 items-center justify-center">
+                  {/* Cancel Activation Button */}
+                  <div className="relative group flex flex-col items-center">
+                    <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
+                      Cancel Activation
+                    </span>
+                    <button
+                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
+                      onClick={() => handleChangeStatus(tx.activationId, 8)}
+                    >
+                      <RxCross2 />
+                    </button>
+                  </div>
+
+                  {/* Check SMS Status Button */}
+                  <div className="relative group flex flex-col items-center">
+                    <span className="absolute bottom-full mb-2 whitespace-nowrap text-xs bg-surface-2 p-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out pointer-events-none z-20">
+                      Check SMS Status
+                    </span>
+                    <button
+                      className="bg-purple-50 p-2 rounded-full hover:bg-purple-300 transition duration-200 ease-in-out cursor-pointer w-8 flex items-center justify-center"
+                      onClick={() => handleCheckSmsStatus(tx.activationId)}
+                    >
+                      <HiMagnifyingGlass />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
